@@ -1,9 +1,59 @@
 <!-- In HTML Comments are written like this -->
 <!-- They can all be removed for your apps -->
 <!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
-<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
 <meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
-<title>Your Web-app Title</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
-<link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
-<link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
-<script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+<title>Orbito</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
+<!--<script type="module" src="main.js"></script>
+<!-- Load the main script. Must be type="module". Have only one of these -->
+
+<head>
+    <html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
+    <meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
+    <meta name="viewport" content="width=devide-width,
+    initial-scale=1">
+    <link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
+</head>
+<script type="module">
+    import { initUI } from './main.js';
+    initUI();
+</script>
+
+<body>
+    <section class="page-container">
+        <div>
+            <section class="tray1">
+            </section>
+        </div>
+        <div>
+            <img src="assets/ORBITO.svg" alt="Orbito Logo" width="500px" height="170">
+            <section class="board">
+                <div class="cell arrow south"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow west"></div>
+
+                <div class="cell arrow south"></div>
+                <div class="cell arrow south"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow north"></div>
+
+                <div class="cell arrow south"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow north"></div>
+                <div class="cell arrow north"></div>
+
+                <div class="cell arrow east"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow north"></div>
+            </section>
+        </div>
+
+        <div>
+            <section class="tray2">
+            </section>
+        </div>
+    </section>
+</body>
+
+</html>
