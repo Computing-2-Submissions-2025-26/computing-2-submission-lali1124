@@ -1,4 +1,5 @@
 body {
+
     background-color: #A4CCC4;
     height: 100vh;
     margin: 0;
@@ -10,7 +11,10 @@ body {
     gap: 20px;
 }
 
-/* 1. Main Page Split */
+/* ─────────────────────────────
+   PAGE LAYOUT
+──────────────────────────── */
+
 .page-container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -18,10 +22,16 @@ body {
     justify-items: center;
     width: 100%;
     max-width: 1200px;
-    gap: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
 }
 
-/* 2. The Board (Middle Column) */
+/* ─────────────────────────────
+   BOARD
+──────────────────────────── */
+
 .board {
     width: 500px;
     height: 500px;
@@ -32,47 +42,33 @@ body {
     border: solid 4px #333333;
     border-radius: 20px;
     background-color: #333333;
-    outline: 30px solid #F8AC2F;
     transition: transform 0.4s ease-in-out;
+    outline: 30px solid #F8AC2F;
+
 }
 
-/* 3. The Trays (Left and Right Columns) */
-.tray1 {
-    width: 150px;
-    height: 300px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 10px;
+.board.player1-turn {
+    outline: 30px solid #ffffff;
 }
 
-.tray2 {
-    width: 150px;
-    height: 300px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 8px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 10px;
+.board.player2-turn {
+    outline: 30px solid #EE583F;
 }
 
-/* 4. Cell & Rotation Styles */
+/* IMPORTANT: needed for pieces inside cells */
 .cell {
     background-image: url("assets/arrow2.svg");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 20px;
+
     position: relative;
-    /* needed so pieces inside sit on top of the arrow */
+
     cursor: pointer;
 }
 
+/* arrow rotations */
 .north {
     transform: rotate(90deg);
 }
@@ -89,91 +85,48 @@ body {
     transform: rotate(0deg);
 }
 
-/* ── NEW ADDITIONS BELOW ─────────────────────────────────────────────────── */
-
-/* Pieces — circles sitting inside cells or trays */
 .piece {
     width: 70%;
     height: 70%;
     border-radius: 50%;
+
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     pointer-events: none;
-    /* clicks go through to the cell underneath */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
-    transition: opacity 0.15s;
+    /* click goes to cell */
+
+    /* removed shadow + border completely */
+    box-shadow: none;
+    border: none;
 }
 
+/* Player colours (as requested) */
 .piece.player1 {
-    background-color: #1a1a2e;
-    /* dark navy */
-    border: 3px solid #e0e0e0;
+    background-color: #ffffff;
 }
 
 .piece.player2 {
-    background-color: #c0392b;
-    /* deep red */
-    border: 3px solid #f0f0f0;
+    background-color: #EE583F;
 }
 
-/* Tray slots — the grid squares inside each tray */
-.tray-slot {
-    position: relative;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.15);
-    aspect-ratio: 1;
-}
+/* ─────────────────────────────
+   DRAG + UI STATES
+──────────────────────────── */
 
-/* Pieces inside trays fill the slot fully */
-.tray-slot .piece {
-    width: 80%;
-    height: 80%;
-}
-
-/* Empty slots (piece already placed on board) */
-.tray-slot--empty {
-    background-color: rgba(0, 0, 0, 0.1);
-    border: 2px dashed rgba(0, 0, 0, 0.2);
-}
-
-/* Highlight the cell whose piece is being dragged */
 .cell--dragging {
     outline: 3px solid #F8AC2F;
     outline-offset: -3px;
     background-color: rgba(248, 172, 47, 0.15);
 }
 
-/* The floating piece that follows the cursor */
-#floater {
-    display: none;
-    position: fixed;
-    pointer-events: none;
-    z-index: 100;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
 
-/* Board rotation animation */
-@keyframes spin-anticlockwise {
-    from {
-        transform: rotate(0deg);
-    }
+/* ─────────────────────────────
+   STATUS TEXT (unchanged)
+──────────────────────────── */
 
-    to {
-        transform: rotate(-90deg);
-    }
-}
-
-.board--rotating {
-    animation: spin-anticlockwise 0.4s ease-in-out;
-}
-
-/* Status message above the board */
 #status {
     font-size: 1rem;
     font-weight: bold;
@@ -185,11 +138,20 @@ body {
 }
 
 #status.player1 {
-    color: #1a1a2e;
-    border-left: 4px solid #1a1a2e;
+    color: #ffffff;
 }
 
 #status.player2 {
     color: #c0392b;
-    border-left: 4px solid #c0392b;
+}
+
+/* board rotation animation (unchanged) */
+@keyframes spin-anticlockwise {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-90deg);
+    }
 }
