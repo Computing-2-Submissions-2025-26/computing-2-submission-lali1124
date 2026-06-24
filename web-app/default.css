@@ -66,9 +66,17 @@ body {
 .board.player1-turn {
     outline: 30px solid #ffffff;
 }
+.player1-turn .cell:focus-visible {
+    outline: 4px solid #ffffff;
+    outline-offset: -4px;
+}
 
 .board.player2-turn {
     outline: 30px solid #EE583F;
+}
+.player2-turn .cell:focus-visible {
+    outline: 4px solid #EE583F;
+    outline-offset: -4px;
 }
 
 

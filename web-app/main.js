@@ -1,40 +1,58 @@
-import { createGame, movePiece, placePieceAndEndTurn } from './orbito.js';
+import {
+    createGame,
+    movePiece,
+    placePieceAndEndTurn,
+    canSelectPiece,
+    canMovePiece,
+    canPlacePiece,
+    isGameOver,
+    PIECE
+} from "./orbito.js";
 
-export const initUI = () => {
-    let gameState = createGame();
-    let selectedCell = null; // Tracks clicks for moving an opponent's piece
-    let animating = false;  // Block input during animations
+export var initUI = Object.freeze(function initUI() {
+    var gameState = createGame();
+    var selectedCell = null; // Tracks clicks for moving an opponent's piece
+    var animating = false;  // Block input during animations
 
-    let p1Wins = 0;
-    let p2Wins = 0;
+    var p1Wins = 0;
+    var p2Wins = 0;
 
-    const boardEl = document.querySelector('.board');
-    const cells = Array.from(document.querySelectorAll('.cell'));
-    const logoEl = document.getElementById('orbito-logo');
+    var boardEl = document.querySelector(".board");
+    var cells = Array.from(document.querySelectorAll(".cell"));
+    var logoEl = document.getElementById("orbito-logo");
+
+    // Enable keyboard navigation for cells
+    cells.forEach(function (cell) {
+        cell.setAttribute("tabindex", "0");
+    });
 
     // --- Popup elements ---
-    const overlayEl = document.getElementById('result-overlay');
-    const messageEl = document.getElementById('result-message');
-    const playAgainBtn = document.getElementById('result-play-again');
+    var overlayEl = document.getElementById("result-overlay");
+    var messageEl = document.getElementById("result-message");
+    var playAgainBtn = document.getElementById("result-play-again");
 
     // --- New UI elements ---
-    const scoreP1El = document.getElementById('score-p1');
-    const scoreP2El = document.getElementById('score-p2');
-    const btnRestart = document.getElementById('btn-restart');
-    const btnRules = document.getElementById('btn-rules');
-    const rulesOverlay = document.getElementById('rules-overlay');
-    const rulesCloseBtn = document.getElementById('rules-close');
+    var scoreP1El = document.getElementById("score-p1");
+    var scoreP2El = document.getElementById("score-p2");
+    var btnRestart = document.getElementById("btn-restart");
+    var btnRules = document.getElementById("btn-rules");
+    var rulesOverlay = document.getElementById("rules-overlay");
+    var rulesCloseBtn = document.getElementById("rules-close");
 
-    const updateScores = () => {
-        if (scoreP1El) scoreP1El.textContent = p1Wins;
-        if (scoreP2El) scoreP2El.textContent = p2Wins;
-    };
+    function updateScores() {
+        if (scoreP1El) {
+            scoreP1El.textContent = p1Wins;
+        }
+        if (scoreP2El) {
+            scoreP2El.textContent = p2Wins;
+        }
+    }
 
     // --- ROTATION MAP ---
     // Derived from rotateBoard in orbito.js: old [r,c] → new [r,c]
     // Outer ring (anticlockwise)
     // Inner ring (anticlockwise)
-    const ROTATION_MAP = [
+    var ROTATION_MAP = [
         // outer ring
         [[0, 0], [1, 0]],
         [[1, 0], [2, 0]],
@@ -57,135 +75,177 @@ export const initUI = () => {
 
     // --- HELPERS ---
 
-    const cellIndex = (r, c) => r * 4 + c;
+    function cellIndex(r, c) {
+        return r * 4 + c;
+    }
 
-    const getCellRect = (r, c) => cells[cellIndex(r, c)].getBoundingClientRect();
+    function getCellRect(r, c) {
+        return cells[cellIndex(r, c)].getBoundingClientRect();
+    }
 
     // --- RENDER (instant, no animation) ---
-    const render = () => {
-        cells.forEach((cell, index) => {
-            const r = Math.floor(index / 4);
-            const c = index % 4;
-            const value = gameState.board[r][c];
-            cell.classList.remove('cell--dragging');
-            cell.classList.remove('cell--winner');
-            cell.classList.remove('cell--loser');
-            cell.innerHTML = ''; // Clear existing pieces
+    function render() {
+        cells.forEach(function (cell, index) {
+            var r = Math.floor(index / 4);
+            var c = index % 4;
+            var value = gameState.board[r][c];
+            var piece;
+            var isWinner;
+            cell.classList.remove("cell--dragging");
+            cell.classList.remove("cell--winner");
+            cell.classList.remove("cell--loser");
+            cell.innerHTML = ""; // Clear existing pieces
 
             // Draw piece if the square isn't empty
-            if (value !== 0) {
-                const piece = document.createElement('div');
-                piece.classList.add('piece', `player${value}`);
+            if (value !== PIECE.EMPTY) {
+                piece = document.createElement("div");
+                piece.classList.add("piece", "player" + value);
                 cell.appendChild(piece);
             }
 
             // Highlight if selected for a move
-            if (selectedCell && selectedCell[0] === r && selectedCell[1] === c) {
-                cell.classList.add('cell--dragging');
+            if (
+                selectedCell &&
+                selectedCell[0] === r &&
+                selectedCell[1] === c
+            ) {
+                cell.classList.add("cell--dragging");
             }
             if (gameState.winningCells) {
-                const isWinner = gameState.winningCells.some(([wr, wc]) => wr === r && wc === c);
+                isWinner = gameState.winningCells.some(function (wc) {
+                    return wc[0] === r && wc[1] === c;
+                });
                 if (isWinner) {
-                    cell.classList.add('cell--winner');
+                    cell.classList.add("cell--winner");
                 } else {
-                    cell.classList.add('cell--loser');
+                    cell.classList.add("cell--loser");
                 }
             }
 
         });
 
         // Update board turn / win classes
-        boardEl.classList.remove('player1-turn', 'player2-turn');
-        if (!gameState.winner && !gameState.isDraw) {
-            boardEl.classList.add(`player${gameState.currentPlayer}-turn`);
+        boardEl.classList.remove("player1-turn", "player2-turn");
+        if (!isGameOver(gameState)) {
+            boardEl.classList.add("player" + gameState.currentPlayer + "-turn");
         }
-        boardEl.classList.remove('player1-win', 'player2-win');
+        boardEl.classList.remove("player1-win", "player2-win");
         if (gameState.winner) {
-            boardEl.classList.remove('player1-turn', 'player2-turn');
-            boardEl.classList.add(`player${gameState.winner}-win`);
+            boardEl.classList.remove("player1-turn", "player2-turn");
+            boardEl.classList.add("player" + gameState.winner + "-win");
         }
 
         // Swap logo based on whose turn it is
         if (logoEl) {
-            logoEl.src = gameState.currentPlayer === 2 && !gameState.winner && !gameState.isDraw
-                ? 'assets/ORBITO_p2.svg'
-                : 'assets/ORBITO.svg';
+            if (
+                gameState.currentPlayer === PIECE.PLAYER_2 &&
+                !gameState.winner &&
+                !gameState.isDraw
+            ) {
+                logoEl.src = "assets/ORBITO_p2.svg";
+            } else {
+                logoEl.src = "assets/ORBITO.svg";
+            }
         }
-    };
+    }
 
     // --- ANIMATE A SINGLE PIECE SLIDING ---
     // Returns a Promise that resolves when the animation finishes.
-    const animateSlide = (fromR, fromC, toR, toC, playerClass, fast = false) => {
-        return new Promise((resolve) => {
-            const fromRect = getCellRect(fromR, fromC);
-            const toRect = getCellRect(toR, toC);
+    function animateSlide(fromR, fromC, toR, toC, playerClass, fast) {
+        return new Promise(function (resolve) {
+            var fromRect = getCellRect(fromR, fromC);
+            var toRect = getCellRect(toR, toC);
 
             // Compute piece size (70% of cell, matching .piece CSS)
-            const pieceW = fromRect.width * 0.7;
-            const pieceH = fromRect.height * 0.7;
+            var pieceW = fromRect.width * 0.7;
+            var pieceH = fromRect.height * 0.7;
 
             // Create a fixed-position clone
-            const clone = document.createElement('div');
-            clone.classList.add('piece', fast ? 'piece--animating-fast' : 'piece--animating', playerClass);
-            clone.style.width = pieceW + 'px';
-            clone.style.height = pieceH + 'px';
+            var clone = document.createElement("div");
+            clone.classList.add(
+                "piece",
+                (
+                    fast
+                    ? "piece--animating-fast"
+                    : "piece--animating"
+                ),
+                playerClass
+            );
+            clone.style.width = pieceW + "px";
+            clone.style.height = pieceH + "px";
 
             // Start position: centred in the old cell
-            const startX = fromRect.left + (fromRect.width - pieceW) / 2;
-            const startY = fromRect.top + (fromRect.height - pieceH) / 2;
-            clone.style.left = startX + 'px';
-            clone.style.top = startY + 'px';
-            clone.style.transform = 'translate(0, 0)';
+            var startX = fromRect.left + (fromRect.width - pieceW) / 2;
+            var startY = fromRect.top + (fromRect.height - pieceH) / 2;
+            clone.style.left = startX + "px";
+            clone.style.top = startY + "px";
+            clone.style.transform = "translate(0, 0)";
 
             document.body.appendChild(clone);
 
             // Compute delta to the new cell centre
-            const endX = toRect.left + (toRect.width - pieceW) / 2;
-            const endY = toRect.top + (toRect.height - pieceH) / 2;
-            const dx = endX - startX;
-            const dy = endY - startY;
+            var endX = toRect.left + (toRect.width - pieceW) / 2;
+            var endY = toRect.top + (toRect.height - pieceH) / 2;
+            var dx = endX - startX;
+            var dy = endY - startY;
 
             // Trigger reflow so the browser registers the starting position
             // before applying the transition
             clone.getBoundingClientRect();
 
             // Animate
-            clone.style.transform = `translate(${dx}px, ${dy}px)`;
+            clone.style.transform = "translate(" + dx + "px, " + dy + "px)";
 
-            clone.addEventListener('transitionend', () => {
+            clone.addEventListener("transitionend", function () {
                 clone.remove();
                 resolve();
             }, { once: true });
 
             // Safety fallback in case transitionend doesn't fire
-            setTimeout(() => {
+            setTimeout(function () {
                 clone.remove();
                 resolve();
-            }, fast ? 150 : 500);
+            }, (
+                fast
+                ? 150
+                : 500
+            ));
         });
-    };
+    }
 
     // --- ANIMATE ROTATION ---
     // Takes the board state BEFORE rotation and animates each piece
     // sliding to its post-rotation position.
-    const animateRotation = (boardBeforeRotation) => {
-        const promises = [];
+    function animateRotation(boardBeforeRotation) {
+        var promises = [];
 
         // Hide all real pieces during animation
-        cells.forEach((cell) => {
-            const piece = cell.querySelector('.piece');
+        cells.forEach(function (cell) {
+            var piece = cell.querySelector(".piece");
             if (piece) {
-                piece.style.visibility = 'hidden';
+                piece.style.visibility = "hidden";
             }
         });
 
-        ROTATION_MAP.forEach(([from, to]) => {
-            const [oldR, oldC] = from;
-            const value = boardBeforeRotation[oldR][oldC];
-            if (value !== 0) {
-                const [newR, newC] = to;
+        ROTATION_MAP.forEach(function (mapItem) {
+            var from = mapItem[0];
+            var to = mapItem[1];
+            var oldR = from[0];
+            var oldC = from[1];
+            var value = boardBeforeRotation[oldR][oldC];
+            var newR;
+            var newC;
+            if (value !== PIECE.EMPTY) {
+                newR = to[0];
+                newC = to[1];
                 promises.push(
-                    animateSlide(oldR, oldC, newR, newC, `player${value}`)
+                    animateSlide(
+                        oldR,
+                        oldC,
+                        newR,
+                        newC,
+                        "player" + value
+                    )
                 );
             }
         });
@@ -195,93 +255,184 @@ export const initUI = () => {
         }
 
         return Promise.all(promises);
-    };
+    }
 
     // --- ANIMATE OPPONENT MOVE ---
-    const animateMove = (fromR, fromC, toR, toC, playerValue) => {
+    function animateMove(fromR, fromC, toR, toC, playerValue) {
         // Hide the piece in the source cell during animation
-        const srcPiece = cells[cellIndex(fromR, fromC)].querySelector('.piece');
+        var srcPiece = cells[cellIndex(fromR, fromC)].querySelector(".piece");
         if (srcPiece) {
-            srcPiece.style.visibility = 'hidden';
+            srcPiece.style.visibility = "hidden";
         }
 
-        return animateSlide(fromR, fromC, toR, toC, `player${playerValue}`, true);
-    };
+        return animateSlide(
+            fromR,
+            fromC,
+            toR,
+            toC,
+            "player" + playerValue,
+            true
+        );
+    }
 
     // --- POPUP ---
-    const showResultPopup = (message) => {
+    function showResultPopup(message) {
         messageEl.textContent = message;
-        overlayEl.classList.add('result-overlay--visible');
-    };
+        overlayEl.classList.add("result-overlay--visible");
+    }
 
-    const hideResultPopup = () => {
-        overlayEl.classList.remove('result-overlay--visible');
-    };
+    function hideResultPopup() {
+        overlayEl.classList.remove("result-overlay--visible");
+    }
 
-    playAgainBtn.addEventListener('click', () => {
+    playAgainBtn.addEventListener("click", function () {
         hideResultPopup();
         gameState = createGame();
         selectedCell = null;
         render();
     });
 
-    btnRestart.addEventListener('click', () => {
+    btnRestart.addEventListener("click", function () {
         hideResultPopup();
-        p1Wins = 0;
-        p2Wins = 0;
-        updateScores();
         gameState = createGame();
         selectedCell = null;
         render();
     });
 
-    btnRules.addEventListener('click', () => {
-        rulesOverlay.classList.add('result-overlay--visible');
+    btnRules.addEventListener("click", function () {
+        rulesOverlay.classList.add("result-overlay--visible");
     });
 
-    rulesCloseBtn.addEventListener('click', () => {
-        rulesOverlay.classList.remove('result-overlay--visible');
+    rulesCloseBtn.addEventListener("click", function () {
+        rulesOverlay.classList.remove("result-overlay--visible");
     });
 
-    const checkAndShowResult = () => {
+    function checkAndShowResult() {
         if (gameState.winner) {
-            if (gameState.winner === 1) p1Wins++;
-            if (gameState.winner === 2) p2Wins++;
+            if (gameState.winner === PIECE.PLAYER_1) {
+                p1Wins += 1;
+            }
+            if (gameState.winner === PIECE.PLAYER_2) {
+                p2Wins += 1;
+            }
             updateScores();
-            showResultPopup(`Player ${gameState.winner} Wins!`);
+            showResultPopup("Player " + gameState.winner + " Wins!");
         } else if (gameState.isDraw) {
             showResultPopup("It's a Draw!");
         }
-    };
+    }
+
+    // --- KEYBOARD ACCESSIBILITY ---
+
+    document.addEventListener("keydown", function (e) {
+        var cellEl = document.activeElement;
+        var index;
+        var newIndex;
+
+        // Hotkeys for N (New Game) and R (Rules)
+        if (e.key === "n" || e.key === "N") {
+            btnRestart.click();
+            return;
+        }
+        if (e.key === "r" || e.key === "R") {
+            btnRules.click();
+            return;
+        }
+
+        if (animating || isGameOver(gameState)) {
+            return;
+        }
+
+        // If no cell is focused and an arrow/enter is pressed, focus the first cell
+        if (!cellEl || !cellEl.classList.contains("cell")) {
+            if (
+                e.key === "ArrowRight" ||
+                e.key === "ArrowLeft" ||
+                e.key === "ArrowDown" ||
+                e.key === "ArrowUp" ||
+                e.key === "Enter"
+            ) {
+                cells[0].focus();
+                e.preventDefault();
+            }
+            return;
+        }
+
+        index = cells.indexOf(cellEl);
+
+        if (e.key === "ArrowRight") {
+            newIndex = (index + 1) % 16;
+            cells[newIndex].focus();
+            e.preventDefault();
+        } else if (e.key === "ArrowLeft") {
+            newIndex = (index - 1 + 16) % 16;
+            cells[newIndex].focus();
+            e.preventDefault();
+        } else if (e.key === "ArrowDown") {
+            newIndex = (index + 4) % 16;
+            cells[newIndex].focus();
+            e.preventDefault();
+        } else if (e.key === "ArrowUp") {
+            newIndex = (index - 4 + 16) % 16;
+            cells[newIndex].focus();
+            e.preventDefault();
+        } else if (e.key === "Enter" || e.key === " ") {
+            cellEl.click();
+            e.preventDefault();
+        } else if (e.key === "Escape") {
+            if (rulesOverlay.classList.contains("result-overlay--visible")) {
+                rulesOverlay.classList.remove("result-overlay--visible");
+            } else if (selectedCell) {
+                selectedCell = null;
+                render();
+            }
+            e.preventDefault();
+        }
+    });
 
     // --- EVENT DELEGATION FOR CLICKS ---
 
-    boardEl.addEventListener('click', async (e) => {
-        if (animating) return;
-        if (gameState.winner || gameState.isDraw) return;
+    boardEl.addEventListener("click", function (e) {
+        var cellEl;
+        var index;
+        var r;
+        var c;
+        var sr;
+        var sc;
+        var pieceValue;
+        var newState;
+        var placement;
+        var placedPiece;
 
-        const cellEl = e.target.closest('.cell');
-        if (!cellEl) return;
+        if (animating || isGameOver(gameState)) {
+            return;
+        }
+
+        cellEl = e.target.closest(".cell");
+        if (!cellEl) {
+            return;
+        }
 
         // Convert the 1D HTML NodeList index to 2D row/col coordinates
-        const index = cells.indexOf(cellEl);
-        const r = Math.floor(index / 4);
-        const c = index % 4;
+        index = cells.indexOf(cellEl);
+        r = Math.floor(index / 4);
+        c = index % 4;
 
         // SCENARIO A: A piece is already selected, try to move it here
         if (selectedCell) {
-            const [sr, sc] = selectedCell;
-            const pieceValue = gameState.board[sr][sc];
-            const newState = movePiece(gameState, selectedCell, [r, c]);
+            sr = selectedCell[0];
+            sc = selectedCell[1];
 
-            if (newState !== gameState) {
-                // Move was successful — animate it
+            if (canMovePiece(gameState, selectedCell, [r, c])) {
+                pieceValue = gameState.board[sr][sc];
+                newState = movePiece(gameState, selectedCell, [r, c]);
                 animating = true;
-                await animateMove(sr, sc, r, c, pieceValue);
-                gameState = newState;
-                selectedCell = null;
-                render();
-                animating = false;
+                animateMove(sr, sc, r, c, pieceValue).then(function () {
+                    gameState = newState;
+                    selectedCell = null;
+                    render();
+                    animating = false;
+                });
             } else {
                 selectedCell = null; // Clear selection on failed second click
                 render();
@@ -289,48 +440,46 @@ export const initUI = () => {
             return;
         }
 
-        const clickedValue = gameState.board[r][c];
-        const opponent = gameState.currentPlayer === 1 ? 2 : 1;
-
         // SCENARIO B: Clicked opponent's piece to initiate a move
-        if (clickedValue === opponent && gameState.phase === 'move_or_place') {
+        if (canSelectPiece(gameState, r, c)) {
             selectedCell = [r, c];
             render();
             return;
         }
 
         // SCENARIO C: Clicked an empty square to place a piece
-        if (clickedValue === 0) {
-            // Save the board state AFTER placing but BEFORE rotating
-            // We need the placed-board for the animation source
-            const boardBeforeRotation = gameState.board.map(row => [...row]);
-            boardBeforeRotation[r][c] = gameState.currentPlayer;
-
-            const newState = placePieceAndEndTurn(gameState, r, c);
-            if (newState !== gameState) {
+        if (canPlacePiece(gameState, r, c)) {
+            placement = placePieceAndEndTurn(gameState, r, c);
+            
+            if (placement.state !== gameState) {
                 animating = true;
 
                 // 1. Show the placed piece instantly in the cell
-                const placedPiece = document.createElement('div');
-                placedPiece.classList.add('piece', `player${gameState.currentPlayer}`);
+                placedPiece = document.createElement("div");
+                placedPiece.classList.add(
+                    "piece",
+                    "player" + gameState.currentPlayer
+                );
                 cellEl.appendChild(placedPiece);
 
                 // 2. Small pause so the user sees the placement before rotation
-                await new Promise((res) => setTimeout(res, 150));
+                new Promise(function (res) {
+                    setTimeout(res, 150);
+                }).then(function () {
+                    // 3. Animate pieces sliding using the Engine's intermediate state
+                    return animateRotation(placement.intermediateBoard);
+                }).then(function () {
+                    // 4. Apply final state and render
+                    gameState = placement.state;
+                    render();
+                    animating = false;
 
-                // 3. Animate pieces sliding to their rotated positions
-                await animateRotation(boardBeforeRotation);
-
-                // 4. Apply final state and render
-                gameState = newState;
-                render();
-                animating = false;
-
-                // 5. Check for win / draw after animation
-                checkAndShowResult();
+                    // 5. Check for win / draw after animation
+                    checkAndShowResult();
+                });
             }
         }
     });
 
     render(); // Initial draw
-};
+});
