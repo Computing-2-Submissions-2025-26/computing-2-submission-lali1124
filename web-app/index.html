@@ -20,29 +20,62 @@
         import { initUI } from './main.js';
         initUI();
     </script>
+    <div class="top-controls">
+        <button id="btn-restart" class="control-btn">Restart</button>
+        <button id="btn-rules" class="control-btn">Rules</button>
+    </div>
+
     <div class="page-container">
-        <img src="assets/ORBITO.svg" alt="Orbito Logo" width="500px" height="170">
-        <section class="board">
-            <div class="cell arrow south"></div>
-            <div class="cell arrow west"></div>
-            <div class="cell arrow west"></div>
-            <div class="cell arrow west"></div>
+        <img id="orbito-logo" src="assets/ORBITO.svg" alt="Orbito Logo" width="500px" height="170">
+        <div class="game-area">
+            <div class="score-box player1-score">
+                <h3>Player 1</h3>
+                <p id="score-p1">0</p>
+            </div>
+            
+            <section class="board">
+                <div class="cell arrow south"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow west"></div>
 
-            <div class="cell arrow south"></div>
-            <div class="cell arrow south"></div>
-            <div class="cell arrow west"></div>
-            <div class="cell arrow north"></div>
+                <div class="cell arrow south"></div>
+                <div class="cell arrow south"></div>
+                <div class="cell arrow west"></div>
+                <div class="cell arrow north"></div>
 
-            <div class="cell arrow south"></div>
-            <div class="cell arrow east"></div>
-            <div class="cell arrow north"></div>
-            <div class="cell arrow north"></div>
+                <div class="cell arrow south"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow north"></div>
+                <div class="cell arrow north"></div>
 
-            <div class="cell arrow east"></div>
-            <div class="cell arrow east"></div>
-            <div class="cell arrow east"></div>
-            <div class="cell arrow north"></div>
-        </section>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow east"></div>
+                <div class="cell arrow north"></div>
+            </section>
+
+            <div class="score-box player2-score">
+                <h3>Player 2</h3>
+                <p id="score-p2">0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result popup – style via .result-overlay / .result-popup in default.css -->
+    <div class="result-overlay" id="result-overlay">
+        <div class="result-popup">
+            <p class="result-popup__message" id="result-message"></p>
+            <button class="result-popup__button" id="result-play-again">Play Again</button>
+        </div>
+    </div>
+
+    <!-- Rules popup -->
+    <div class="result-overlay" id="rules-overlay">
+        <div class="rules-popup">
+            <button class="rules-close-btn" id="rules-close">&times;</button>
+            <img src="assets/Gamerules.svg" alt="Game Rules" class="rules-img">
+        </div>
     </div>
 </body>
 

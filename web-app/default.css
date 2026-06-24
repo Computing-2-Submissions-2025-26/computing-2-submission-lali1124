@@ -16,14 +16,9 @@ body {
 ──────────────────────────── */
 
 .page-container {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    justify-items: center;
-    width: 100%;
-    max-width: 1200px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     gap: 4px;
 }
@@ -43,9 +38,30 @@ body {
     border-radius: 20px;
     background-color: #333333;
     transition: transform 0.4s ease-in-out;
-    outline: 30px solid #F8AC2F;
+    outline: 30px solid #A4CCC4;
 
 }
+
+@keyframes BorderGrow {
+    from {
+        outline-width: 30px;
+    }
+
+    to {
+        outline-width: 100vmax;
+    }
+}
+
+.board.player1-win {
+    outline: solid #ffffff;
+    animation: BorderGrow 1s ease-in-out forwards;
+}
+
+.board.player2-win {
+    outline: solid #EE583F;
+    animation: BorderGrow 1s ease-in-out forwards;
+}
+
 
 .board.player1-turn {
     outline: 30px solid #ffffff;
@@ -54,6 +70,7 @@ body {
 .board.player2-turn {
     outline: 30px solid #EE583F;
 }
+
 
 /* IMPORTANT: needed for pieces inside cells */
 .cell {
@@ -85,6 +102,14 @@ body {
     transform: rotate(0deg);
 }
 
+.cell--winner {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.cell--loser {
+    opacity: 0.4;
+}
+
 .piece {
     width: 70%;
     height: 70%;
@@ -101,6 +126,7 @@ body {
     /* removed shadow + border completely */
     box-shadow: none;
     border: none;
+    z-index: 1000;
 }
 
 /* Player colours (as requested) */
@@ -154,4 +180,222 @@ body {
     to {
         transform: rotate(-90deg);
     }
+}
+
+/* ─────────────────────────────
+   PIECE ANIMATION (FLIP clones)
+──────────────────────────── */
+
+.piece--animating {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2000;
+    transition: transform 400ms ease-in-out;
+    box-shadow: none;
+    border: none;
+}
+
+.piece--animating-fast {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2000;
+    transition: transform 150ms ease-in-out;
+    box-shadow: none;
+    border: none;
+}
+
+/* ─────────────────────────────
+   RESULT POPUP
+──────────────────────────── */
+
+.result-overlay {
+    display: none;
+    /* hidden by default, toggled via JS */
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 5000;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-overlay--visible {
+    display: flex;
+}
+
+.result-popup {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px 56px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    animation: popup-in 0.35s ease-out;
+}
+
+@keyframes popup-in {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.result-popup__message {
+    font-family: Helvetica, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333333;
+    margin: 0 0 24px;
+}
+
+.result-popup__button {
+    font-family: Helvetica, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 36px;
+    border: none;
+    border-radius: 12px;
+    background-color: #333333;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.result-popup__button:hover {
+    background-color: #555555;
+}
+
+/* ─────────────────────────────
+   TOP CONTROLS
+──────────────────────────── */
+
+.top-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+}
+
+.control-btn {
+    font-family: Helvetica, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333333;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.control-btn:hover {
+    background-color: #555555;
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+/* ─────────────────────────────
+   GAME AREA & SCORES
+──────────────────────────── */
+
+.game-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+}
+
+.score-box {
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.score-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    color: #A4CCC4;
+}
+
+.score-box p {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.player1-score h3 {
+    color: #ffffff;
+}
+.player1-score p {
+    color: #ffffff;
+}
+
+.player2-score h3 {
+    color: #EE583F;
+}
+.player2-score p {
+    color: #EE583F;
+}
+
+/* ─────────────────────────────
+   RULES POPUP
+──────────────────────────── */
+
+.rules-popup {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    animation: popup-in 0.35s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.rules-img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+}
+
+.rules-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: #333333;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.rules-close-btn:hover {
+    background-color: #f0f0f0;
 }
