@@ -1,8 +1,5 @@
 import Orbito from "../orbito.js";
 
-
-// If your file is named orbito.js at the project root, change the path to:
-// import Orbito from "../orbito.js";
 const E = Orbito.PIECE.EMPTY;
 const P1 = Orbito.PIECE.PLAYER_1;
 const P2 = Orbito.PIECE.PLAYER_2;
@@ -19,9 +16,8 @@ const display_board = function (board) {
         return "\n" + JSON.stringify(board);
     }
 };
-// ─────────────────────────────────────────────────────────────────────────────
+
 // TEST HELPERS
-// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Creates a game state with a specific board layout for testing.
@@ -572,7 +568,7 @@ describe("Game over behaviour", function () {
                     "After the game is won, placing a piece should return" +
                     "the same game state unchanged, but a new state" +
                     "was returned." +
-                    "The board was: " + "\n" + formatBoard(afterAttempt.board)
+                    display_board(afterAttempt.board)
                 );
             }
         }

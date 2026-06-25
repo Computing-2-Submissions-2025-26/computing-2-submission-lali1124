@@ -11,9 +11,7 @@ body {
     gap: 20px;
 }
 
-/* ─────────────────────────────
-   PAGE LAYOUT
-──────────────────────────── */
+/* PAGE LAYOUT */
 
 .page-container {
     display: flex;
@@ -23,9 +21,7 @@ body {
     gap: 3.5px;
 }
 
-/* ─────────────────────────────
-   BOARD
-──────────────────────────── */
+/* BOARD */
 .orbito-logo {
     z-index: 10;
 }
@@ -85,8 +81,6 @@ body {
     outline-offset: -20px;
 }
 
-
-/* IMPORTANT: needed for pieces inside cells */
 .cell {
     background-image: url("assets/arrow2.svg");
     background-size: contain;
@@ -137,13 +131,12 @@ body {
     pointer-events: none;
     /* click goes to cell */
 
-    /* removed shadow + border completely */
     box-shadow: none;
     border: none;
     z-index: 1000;
 }
 
-/* Player colours (as requested) */
+/* Player colours */
 .piece.player1 {
     background-color: #ffffff;
 }
@@ -152,9 +145,7 @@ body {
     background-color: #EE583F;
 }
 
-/* ─────────────────────────────
-   DRAG + UI STATES
-──────────────────────────── */
+/* DRAG + UI STATES*/
 /*
 .cell--dragging {
     outline: 3px solid #F8AC2F;
@@ -162,16 +153,12 @@ body {
     background-color: rgba(248, 172, 47, 0.15);
 }
 /*
-/* ─────────────────────────────
-   FOCUS & SELECTION STATES
-──────────────────────────── */
+/* FOCUS & SELECTION STATES */
 
-/* 1. Ensure the cell can position the highlights correctly */
 .cell {
     position: relative;
 }
 
-/* 2. Remove the browser's default ugly blue focus ring entirely */
 .cell:focus {
     outline: none;
 }
@@ -207,7 +194,7 @@ body {
     border-radius: inherit;
 }
 
-/* 4. SELECTED PIECE HIGHLIGHT (Yellow Box) */
+/* 4. SELECTED PIECE HIGHLIGHT */
 /* This always shows when an opponent piece is clicked/selected */
 .cell--dragging::after {
     content: '';
@@ -230,9 +217,7 @@ body {
     background-color: rgba(248, 172, 47, 0.15) !important;
 }
 
-/* ─────────────────────────────
-   STATUS TEXT (unchanged)
-──────────────────────────── */
+/* STATUS TEXT */
 
 #status {
     font-size: 1rem;
@@ -263,9 +248,7 @@ body {
     }
 }
 
-/* ─────────────────────────────
-   PIECE ANIMATION (FLIP clones)
-──────────────────────────── */
+/* PIECE ANIMATION (FLIP clones)*/
 
 .piece--animating {
     position: fixed;
@@ -287,9 +270,7 @@ body {
     border: none;
 }
 
-/* ─────────────────────────────
-   RESULT POPUP
-──────────────────────────── */
+/* RESULT POPUP*/
 
 .result-overlay {
     display: none;
@@ -325,7 +306,6 @@ body {
 }
 
 .result-popup--draw {
-    /* Define draw styling if needed */
     background: #A4CCC4;
     color: #333;
     outline: #333 solid 8px;
@@ -368,9 +348,7 @@ body {
     background-color: #AAAAAA;
 }
 
-/* ─────────────────────────────
-   TOP CONTROLS
-──────────────────────────── */
+/* TOP CONTROLS */
 
 .top-controls {
     position: absolute;
@@ -423,9 +401,7 @@ body {
     transform: scale(0.95);
 }
 
-/* ─────────────────────────────
-   GAME AREA & SCORES
-──────────────────────────── */
+/* GAME AREA & SCORES*/
 
 .game-area {
     display: flex;
@@ -481,9 +457,7 @@ body {
     font-size: 4rem;
     font-weight: bold;
 }
-/* ─────────────────────────────
-   RULES POPUP
-──────────────────────────── */
+/* RULES POPUP*/
 
 .rules-popup {
     border-radius: 0px;
