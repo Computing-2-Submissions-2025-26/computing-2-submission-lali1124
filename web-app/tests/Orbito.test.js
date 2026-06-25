@@ -40,11 +40,15 @@ const gameWithBoard = (
  * (after rotation). This is a shorthand to reduce boilerplate in tests
  * while still testing the real public function.
  * @param {Object} game The current game state.
- * @param {number} row Row index to place in.
+ * @param {number}row Row index to place in.
  * @param {number} col Column index to place in.
  * @returns {Object} The new game state after placing and rotating.
  */
-const place = (game, row, col) => Orbito.placePieceAndEndTurn(game, row, col).state;
+const place = (game, row, col) => Orbito.placePieceAndEndTurn(
+    game,
+    row,
+    col
+).state;
 
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,7 +98,8 @@ describe("A freshly created game", function () {
 
 describe("Incomplete lines are not wins", function () {
     it(
-        `Given a board where a player has exactly three pieces in a row after rotation,
+        `Given a board where a player has exactly three pieces in a
+        row after rotation,
 the game should not report a winner.`,
         function () {
             // After placing P1 at [0][0] and rotating, the bottom row of the
@@ -118,8 +123,8 @@ the game should not report a winner.`,
     );
 
     it(
-        `Given a board where a player has three pieces in a column after rotation,
-the game should not report a winner.`,
+        `Given a board where a player has three pieces in a column after
+        rotation, the game should not report a winner.`,
         function () {
             // After placing P1 at [2][3] and rotating, column 3 of the
             // rotated board is [P1, P1, P1, EMPTY] — only 3 in a column.
@@ -153,11 +158,12 @@ the game should not report a winner.`,
 describe("Win conditions", function () {
     describe("Row wins", function () {
         it(
-            `Given a board where placing a piece gives player 1 four in a row after rotation,
-the game should report player 1 as the winner.`,
+            `Given a board where placing a piece gives player 1 four in a row
+            after rotation, the game should report player 1 as the winner.`,
             function () {
                 // After placing P1 at [3][2] and rotating:
-                // Row 3 of rotated board = [board[2][0], board[3][0], board[3][1], board[3][2]]
+                // Row 3 of rotated board = [board[2][0], board[3][0],
+                // board[3][1], board[3][2]]
                 //                        = [P1, P1, P1, P1]
                 const game = gameWithBoard([
                     [E, E, E, E],
@@ -178,8 +184,8 @@ the game should report player 1 as the winner.`,
         );
 
         it(
-            `Given a board where placing a piece gives player 2 four in a row after rotation,
-the game should report player 2 as the winner.`,
+            `Given a board where placing a piece gives player 2 four in a
+            row after rotation, the game should report player 2 as the winner.`,
             function () {
                 // Same pattern as above but for player 2
                 const game = gameWithBoard([
@@ -203,11 +209,13 @@ the game should report player 2 as the winner.`,
 
     describe("Column wins", function () {
         it(
-            `Given a board where placing a piece gives player 1 four in a column after rotation,
-the game should report player 1 as the winner.`,
+            `Given a board where placing a piece gives player 1 four
+            in a column after rotation, the game should report player 1
+            as the winner.`,
             function () {
                 // After placing P1 at [3][0] and rotating:
-                // Column 1 of rotated board = [board[0][2], board[1][2], board[1][1], board[3][0]]
+                // Column 1 of rotated board = [board[0][2], board[1][2],
+                // board[1][1], board[3][0]]
                 //                           = [P1, P1, P1, P1]
                 const game = gameWithBoard([
                     [E, E, P1, E],
@@ -230,11 +238,13 @@ the game should report player 1 as the winner.`,
 
     describe("Diagonal wins", function () {
         it(
-            `Given a board where placing a piece gives player 1 four along the main diagonal after rotation,
-the game should report player 1 as the winner.`,
+            `Given a board where placing a piece gives player 1 four
+            along the main diagonal after rotation,
+            the game should report player 1 as the winner.`,
             function () {
                 // After placing P1 at [3][2] and rotating:
-                // Main diagonal = [board[0][1], board[1][2], board[2][1], board[3][2]]
+                // Main diagonal = [board[0][1], board[1][2], board[2][1],
+                // board[3][2]]
                 //               = [P1, P1, P1, P1]
                 const game = gameWithBoard([
                     [E, P1, E, E],
@@ -255,11 +265,13 @@ the game should report player 1 as the winner.`,
         );
 
         it(
-            `Given a board where placing a piece gives player 1 four along the anti-diagonal after rotation,
-the game should report player 1 as the winner.`,
+            `Given a board where placing a piece gives player 1 four along
+            the anti-diagonal after rotation,
+            the game should report player 1 as the winner.`,
             function () {
                 // After placing P1 at [2][0] and rotating:
-                // Anti-diagonal = [board[1][3], board[2][2], board[1][1], board[2][0]]
+                // Anti-diagonal = [board[1][3], board[2][2], board[1][1],
+                // board[2][0]]
                 //               = [P1, P1, P1, P1]
                 const game = gameWithBoard([
                     [E, E, E, E],
@@ -290,7 +302,8 @@ the game should report player 1 as the winner.`,
 
 describe("Correct winner is reported", function () {
     it(
-        `When player 1 wins, the game should not report player 2 as the winner.`,
+        `When player 1 wins, the game should not report player 2
+        as the winner.`,
         function () {
             const game = gameWithBoard([
                 [E, E, E, E],
@@ -311,7 +324,8 @@ describe("Correct winner is reported", function () {
     );
 
     it(
-        `When player 2 wins, the game should not report player 1 as the winner.`,
+        `When player 2 wins, the game should not report player
+        1 as the winner.`,
         function () {
             const game = gameWithBoard([
                 [E, E, E, E],
@@ -342,14 +356,17 @@ describe("Correct winner is reported", function () {
 
 describe("Win is detected after board rotation, not before", function () {
     it(
-        `Given a board where no four-in-a-row exists before rotation but does after,
+        `Given a board where no four-in-a-row exists before
+        rotation but does after,
 the game should detect the win after rotation.`,
         function () {
             // Board before placing:
             // row 3 = [P1, P1, EMPTY, EMPTY] — no four in a row
             // After placing P1 at [3][2]:
-            // row 3 = [P1, P1, P1, EMPTY] — still no four in a row in the UNROTATED board
-            // After rotation, row 3 of rotated board = [P1, P1, P1, P1] — four in a row!
+            // row 3 = [P1, P1, P1, EMPTY] — still no four in a row
+            // in the UNROTATED board
+            // After rotation, row 3 of rotated board = [P1, P1, P1, P1]
+            // — four in a row!
             const game = gameWithBoard([
                 [E, E, E, E],
                 [E, E, E, E],
@@ -357,18 +374,24 @@ the game should detect the win after rotation.`,
                 [P1, P1, E, E]
             ]);
 
-            const { state, intermediateBoard } = Orbito.placePieceAndEndTurn(game, 3, 2);
+            const {state, intermediateBoard} = Orbito.placePieceAndEndTurn(
+                game,
+                3,
+                2
+            );
 
             // The intermediate board is after placing but BEFORE rotation.
             // The bottom row should NOT yet have four-in-a-row.
             const bottomRowBeforeRotation = intermediateBoard[3];
-            const winAlreadyExistedBeforeRotation = bottomRowBeforeRotation.every(
-                (cell) => cell === P1
+            const winAlreadyExistedBeforeRotation = (
+                bottomRowBeforeRotation.every(
+                    (cell) => cell === P1
+                )
             );
 
             if (winAlreadyExistedBeforeRotation) {
                 throw new Error(
-                    "This test is invalid: the board already has four in a row " +
+                    "Test is invalid: the board already has four in a row " +
                     "before rotation, so it does not test the rotation rule. " +
                     "The board setup needs to be changed."
                 );
@@ -393,13 +416,16 @@ the game should detect the win after rotation.`,
 
 describe("Simultaneous four-in-a-row by both players", function () {
     it(
-        `If the board rotation causes both players to complete four in a row simultaneously,
+        `If the board rotation causes both players to complete four
+        in a row simultaneously,
 the result should be a draw and neither player should be declared the winner.`,
         function () {
             // After placing P1 at [1][3] and rotating:
-            // Row 0 of rotated board = [board[0][1], board[0][2], board[0][3], board[1][3]]
+            // Row 0 of rotated board = [board[0][1], board[0][2],
+            // board[0][3], board[1][3]]
             //                        = [P1, P1, P1, P1] → P1 wins row 0
-            // Row 3 of rotated board = [board[2][0], board[3][0], board[3][1], board[3][2]]
+            // Row 3 of rotated board = [board[2][0], board[3][0],
+            // board[3][1], board[3][2]]
             //                        = [P2, P2, P2, P2] → P2 wins row 3
             // Both players win → draw
             const game = gameWithBoard([
@@ -413,17 +439,19 @@ the result should be a draw and neither player should be declared the winner.`,
 
             if (!result.isDraw) {
                 throw new Error(
-                    "When both players complete four-in-a-row simultaneously, " +
-                    "the result should be a draw. isDraw was: " + result.isDraw +
+                    "When both players complete four-in-a-row " +
+                    "simultaneously, the result should be a draw. " +
+                    "the result should be a draw. isDraw was: " +
+                    result.isDraw +
                     ", winner was: " + result.winner
                 );
             }
 
             if (result.winner !== null) {
                 throw new Error(
-                    "When both players complete four-in-a-row simultaneously, " +
-                    "no single player should be declared the winner. " +
-                    "Winner was: " + result.winner
+                    "When both players complete four-in-a-row" +
+                    "simultaneously, no single player should be" +
+                    "declared the winner. Winner was: " + result.winner
                 );
             }
         }
@@ -438,11 +466,13 @@ the result should be a draw and neither player should be declared the winner.`,
 
 describe("Draw by full board", function () {
     it(
-        `When the last piece is placed and the board is completely full with no four-in-a-row,
+        `When the last piece is placed and the board is completely
+        full with no four-in-a-row,
 the game should be a draw.`,
         function () {
             // Board is full after placing P1 at [3][3].
-            // After rotation no row, column, or diagonal has four of the same piece.
+            // After rotation no row, column, or diagonal
+            // has four of the same piece.
             const game = gameWithBoard([
                 [P1, P2, P2, P1],
                 [P2, P1, P1, P2],
@@ -461,8 +491,8 @@ the game should be a draw.`,
 
             if (!result.isDraw) {
                 throw new Error(
-                    "A full board with no four-in-a-row should set isDraw to true, " +
-                    "but isDraw was: " + result.isDraw
+                    "A full board with no four-in-a-row should set" +
+                    "isDraw to true, but isDraw was: " + result.isDraw
                 );
             }
         }
@@ -498,7 +528,8 @@ describe("Game over behaviour", function () {
     );
 
     it(
-        `After a player wins, attempting to place another piece should not change the game state.`,
+        `After a player wins, attempting to place another piece should
+        not change the game state.`,
         function () {
             const game = gameWithBoard([
                 [E, E, E, E],
@@ -514,8 +545,9 @@ describe("Game over behaviour", function () {
 
             if (afterAttempt !== wonGame) {
                 throw new Error(
-                    "After the game is won, placing a piece should return the " +
-                    "same game state unchanged, but a new state was returned."
+                    "After the game is won, placing a piece should return" +
+                    "the same game state unchanged, but a new state" +
+                    "was returned."
                 );
             }
         }
