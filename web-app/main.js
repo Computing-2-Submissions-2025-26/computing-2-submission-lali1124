@@ -1,32 +1,76 @@
+/**
+ * @fileoverview initUI.js initialises and manages the interactive user interface
+ * for the Orbito board game. Handles rendering, click and keyboard input, piece
+ * animation, score tracking, and result display. Delegates all game logic to the
+ * {@link Orbito} module and all statistics tracking to {@link StatsOrbito}.
+ * @module initUI
+ */
 
 import Orbito from "./orbito.js";
 import StatsOrbito from "./StatsOrbito.js";
 
+/**
+ * Initialises the Orbito game UI by binding all DOM elements, registering event
+ * listeners for mouse and keyboard input, and performing an initial render
+ *  of the
+ * board. Should be called once the DOM is fully loaded.
+ * @function initUI
+ * @returns {void}
+ */
 const initUI = Object.freeze(function initUI() {
+    /** @type {Orbito.GameState} The current state of the game. */
     var gameState = Orbito.createGame();
+    /** @type {number[]|null} The [row, col] of the currently selected cell,
+     *  or null if none. */
     var selectedCell = null;
+    /** @type {boolean} True while a piece animation is in progress, blocking
+     *  further input. */
     var animating = false;
 
+    /** @type {HTMLElement} The board grid container element. */
     var boardEl = document.querySelector(".board");
+    /** @type {HTMLElement[]} All 16 cell elements in row-major order
+     *  (row 0 first). */
     var cells = Array.from(document.querySelectorAll(".cell"));
+    /** @type {HTMLImageElement} The logo image element, which changes based on
+     *  the active player. */
     var logoEl = document.getElementById("orbito-logo");
 
     // --- Popup elements ---
+    /** @type {HTMLElement} The full-screen overlay shown when the game ends. */
     var overlayEl = document.getElementById("result-overlay");
+    /** @type {HTMLElement} The text element inside the result popup
+     *  (e.g. "Player 1 Wins!"). */
     var messageEl = document.getElementById("result-message");
+    /** @type {HTMLButtonElement} The "Play Again" button shown on the result
+     *  popup. */
     var playAgainBtn = document.getElementById("result-play-again");
 
     // --- Original UI elements ---
+    /** @type {HTMLElement} The element displaying Player 1's cumulative
+     *  win count. */
     var scoreP1El = document.getElementById("score-p1");
+    /** @type {HTMLElement} The element displaying Player 2's cumulative
+     *  win count. */
     var scoreP2El = document.getElementById("score-p2");
+    /** @type {HTMLButtonElement} The button that restarts the current game. */
     var btnRestart = document.getElementById("btn-restart");
+    /** @type {HTMLButtonElement} The button that opens the rules overlay. */
     var btnRules = document.getElementById("btn-rules");
+    /** @type {HTMLElement} The overlay element containing the rules image. */
     var rulesOverlay = document.getElementById("rules-overlay");
+    /** @type {HTMLButtonElement} The button that closes the rules overlay. */
     var rulesCloseBtn = document.getElementById("rules-close");
 
     // Initialize stats
+    /** @type {Object} The current session statistics object for both players.*/
     var currentStats = StatsOrbito.get_statistics(["Player 1", "Player 2"]);
 
+    /**
+     * Updates the score display elements to reflect the latest win counts
+     * from the current session statistics.
+     * @returns {void}
+     */
     function updateScores() {
         if (scoreP1El) {
             scoreP1El.textContent = currentStats["Player 1"].player_1_wins;
@@ -39,13 +83,35 @@ const initUI = Object.freeze(function initUI() {
 
     // --- HELPERS ---
 
+    /**
+     * Converts a [row, col] pair to a flat index into the cells array.
+     * @param {number} r - Row index (0–3).
+     * @param {number} c - Column index (0–3).
+     * @returns {number} The corresponding flat index (0–15).
+     */
     function cellIndex(r, c) {
         return (r * 4) + c;
     }
+
+    /**
+     * Returns the bounding client rectangle of the cell at the given
+     *  [row, col].
+     * Used to compute the pixel positions needed for slide animations.
+     * @param {number} r - Row index (0–3).
+     * @param {number} c - Column index (0–3).
+     * @returns {DOMRect} The bounding rectangle of the cell element.
+     */
     function getCellRect(r, c) {
         return cells[cellIndex(r, c)].getBoundingClientRect();
     }
 
+    /**
+     * Re-renders the entire board to match the current game state.
+     * Clears and redraws all pieces, applies selection highlights,
+     * marks winning and losing cells, updates board turn classes,
+     * and switches the logo to reflect the active player.
+     * @returns {void}
+     */
     function render() {
         cells.forEach(function (cell, index) {
             var r = Math.floor(index / 4);
@@ -117,9 +183,34 @@ const initUI = Object.freeze(function initUI() {
             } else {
                 logoEl.src = "assets/ORBITO.svg";
             }
+            if (gameState.winner === 1) {
+                logoEl.src = "assets/ORBITO_p2.svg";
+            }
+            if (gameState.winner === 2) {
+                logoEl.src = "assets/ORBITO.svg";
+            }
         }
     }
 
+    /**
+     * Animates a piece sliding from one cell to another using a
+     *  floating clone element
+     * and CSS transitions. The clone is appended to the document
+     *  body, transitioned to
+     * its destination, and removed once the animation ends or a
+     *  timeout elapses.
+     * @param {number} fromR - Source row index (0–3).
+     * @param {number} fromC - Source column index (0–3).
+     * @param {number} toR - Destination row index (0–3).
+     * @param {number} toC - Destination column index (0–3).
+     * @param {string} playerClass - CSS class identifying the
+     *  piece colour (e.g. "player1").
+     * @param {boolean} fast - If true, uses a shorter animation
+     *  duration (for piece moves
+     *   rather than board rotation).
+     * @returns {Promise<void>} A promise that resolves when the
+     *  animation completes.
+     */
     function animateSlide(fromR, fromC, toR, toC, playerClass, fast) {
         return new Promise(function (resolve) {
             var fromRect = getCellRect(fromR, fromC);
@@ -172,6 +263,21 @@ const initUI = Object.freeze(function initUI() {
         });
     }
 
+    /**
+     * Animates all piece movements caused by a board rotation.
+     *  Each piece is slid
+     * along its rotation path simultaneously using {@link animateSlide}. Static
+     * pieces are hidden during the animation to prevent visual
+     *  duplication with clones.
+     * Uses {@link Orbito.ROTATION_MAP} to determine each piece's
+     *  source and destination.
+     * @param {Orbito.Board} boardBeforeRotation - The board layout
+     *  captured immediately
+     *   after piece placement but before rotation, used to identify
+     *  which pieces to animate.
+     * @returns {Promise<void>} A promise that resolves when all
+     *  animations are complete.
+     */
     function animateRotation(boardBeforeRotation) {
         var promises = [];
 
@@ -210,6 +316,12 @@ const initUI = Object.freeze(function initUI() {
         return Promise.all(promises);
     }
 
+    /**
+     * Checks whether the game has ended and, if so, records the result in the
+     * statistics, updates the score display, and shows the result popup with
+     * styling appropriate to the winner or draw.
+     * @returns {void}
+     */
     function checkAndShowResult() {
         if (Orbito.isGameOver(gameState)) {
             var resultNum = 0;
@@ -228,7 +340,17 @@ const initUI = Object.freeze(function initUI() {
             );
             updateScores();
 
-            overlayEl.classList.add("result-overlay--visible");
+            setTimeout(function () {
+                var popupEl = document.querySelector(".result-popup");
+                overlayEl.classList.add("result-overlay--visible");
+                if (gameState.winner === 1) {
+                    popupEl.classList.add("result-popup--player1-win");
+                } else if (gameState.winner === 2) {
+                    popupEl.classList.add("result-popup--player2-win");
+                } else if (gameState.isDraw) {
+                    popupEl.classList.add("result-popup--draw");
+                }
+            }, 200);
             if (playAgainBtn) {
                 playAgainBtn.focus();
             }
@@ -332,6 +454,19 @@ const initUI = Object.freeze(function initUI() {
 
     // --- CORE INTERACTION LOGIC ---
 
+    /**
+     * Handles a player interaction with a given cell element.
+     * Covers three scenarios in order of priority:
+     * - (A) A piece is already selected: attempt to move it to this cell.
+     * - (B) This cell holds an opponent's piece: select it for moving.
+     * - (C) This cell is empty: place the current player's piece and
+     *  trigger rotation.
+     * Does nothing if an animation is currently in progress or the game
+     *  is over.
+     * @param {HTMLElement} cellEl - The cell element that was clicked
+     *  or activated.
+     * @returns {void}
+     */
     function attemptInteraction(cellEl) {
         if (animating || Orbito.isGameOver(gameState)) {
             return;

@@ -31,6 +31,23 @@ var Orbito = Object.create(null);
  */
 
 /**
+ * A full snapshot of an in-progress or completed Orbito game.
+ * @memberof Orbito
+ * @typedef {Object} GameState
+ * @property {Orbito.Board} board - The current 4x4 game board.
+ * @property {string} phase - The current turn phase; one of
+ *  {@link Orbito.PHASE}.
+ * @property {Orbito.Player} currentPlayer - The player whose turn it currently
+ *  is.
+ * @property {Orbito.Player|null} winner - The winning player, or null if the
+ *  game is ongoing.
+ * @property {boolean} isDraw - True if the game has ended in a draw.
+ * @property {number[][]|null} winningCells - Coordinates of cells forming the
+ *  winning line,
+ *   or null if there is no winner yet.
+ */
+
+/**
  * Constants for the game pieces.
  * @memberof Orbito
  * @readonly
@@ -44,6 +61,10 @@ Orbito.PIECE = Object.freeze({
 
 /**
  * Constants for the turn phases.
+ * In the MOVE_OR_PLACE phase, the current player may optionally move one of the
+ * opponent's pieces to an adjacent empty square before placing their own piece.
+ * In the PLACE phase, the player must place a piece immediately, having
+ *  already moved one.
  * @memberof Orbito
  * @readonly
  * @enum {string}
@@ -55,7 +76,10 @@ Orbito.PHASE = Object.freeze({
 
 /**
  * Coordinate mapping representing how pieces shift when the board rotates.
- * Exported so the UI can safely animate paths without calculating game logic.
+ * Each entry is a pair [[fromRow, fromCol], [toRow, toCol]] describing where
+ * a piece at the first coordinate moves to after rotation.
+ * The outer ring rotates clockwise and the inner ring rotates anti-clockwise.
+ * Exported so the UI can safely animate paths without recalculating game logic.
  * @memberof Orbito
  * @readonly
  * @type {number[][][]}
@@ -81,16 +105,35 @@ Orbito.token_strings = Object.freeze({
 
 // --- 1. Utilities & Helpers ---
 
+/**
+ * Returns whether all elements in an array are equal and non-empty.
+ * Used internally to detect winning lines on the board.
+ * @private
+ * @param {Orbito.Token_or_empty[]} arr - The array of board values to check.
+ * @returns {boolean} True if all values are the same non-empty token.
+ */
 function allEqual(arr) {
     var first = arr[0];
     return first !== Orbito.PIECE.EMPTY && R.all(R.equals(first), arr);
 }
 
+/**
+ * Returns whether every position on the board is occupied by a piece.
+ * Used internally to detect draw conditions when no winner exists.
+ * @private
+ * @type {function(Orbito.Board): boolean}
+ */
 var isBoardFull = R.pipe(
     R.flatten,
     R.none(R.equals(Orbito.PIECE.EMPTY))
 );
 
+/**
+ * Returns the player who is not the given player.
+ * @private
+ * @param {Orbito.Player} player - The current player.
+ * @returns {Orbito.Player} The opposing player.
+ */
 function getOpponent(player) {
     if (player === Orbito.PIECE.PLAYER_1) {
         return Orbito.PIECE.PLAYER_2;
@@ -101,12 +144,30 @@ function getOpponent(player) {
 
 // --- 2. Stringification (For debugging & tests) ---
 
+/**
+ * Returns a function that maps a single token value to its string
+ *  representation.
+ * @private
+ * @param {string[]} tokenStrings - Array of display strings indexed
+ *  by token value.
+ * @returns {function(Orbito.Token_or_empty): string} A mapper from
+ *  token to string.
+ */
 function replaceTokensInSlot(tokenStrings) {
     return function (token) {
         return tokenStrings[token] || token;
     };
 }
 
+/**
+ * Returns a function that replaces every token on a board with
+ * its string representation.
+ * @private
+ * @param {string[]} tokenStrings - Array of display strings
+ * indexed by token value.
+ * @returns {function(Orbito.Board): string[][]} A mapper from
+ *  board to string board.
+ */
 function replaceTokensOnBoard(tokenStrings) {
     return function (board) {
         return R.map(R.map(replaceTokensInSlot(tokenStrings)), board);
@@ -141,10 +202,29 @@ Orbito.to_string = Orbito.to_string_with_tokens(["0", "1", "2"]);
 
 // --- 3. Game Rules (Domain Logic) ---
 
+/**
+ * Returns whether a given board position contains no piece.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number} row - The row index to check (0–3).
+ * @param {number} col - The column index to check (0–3).
+ * @returns {boolean} True if the position is empty.
+ */
 Orbito.isSquareEmpty = function (game, row, col) {
     return R.path(["board", row, col], game) === Orbito.PIECE.EMPTY;
 };
 
+/**
+ * Returns whether two board positions are orthogonally adjacent.
+ * Two positions are adjacent if they differ by exactly one row or one column,
+ * but not both — diagonal adjacency is not permitted.
+ * @memberof Orbito
+ * @function
+ * @param {number[]} from - The [row, col] of the starting position.
+ * @param {number[]} to - The [row, col] of the target position.
+ * @returns {boolean} True if the two positions are orthogonally adjacent.
+ */
 Orbito.isSquareAdjacent = function (from, to) {
     var rowDiff = Math.abs(from[0] - to[0]);
     var colDiff = Math.abs(from[1] - to[1]);
@@ -154,16 +234,47 @@ Orbito.isSquareAdjacent = function (from, to) {
     );
 };
 
+/**
+ * Returns whether the game has ended, either because a player has won or the
+ * board has been filled without a winner (a draw).
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @returns {boolean} True if the game is over.
+ */
 Orbito.isGameOver = function (game) {
     return game.winner !== null || game.isDraw;
 };
 
+/**
+ * Returns whether the current player may select an opponent's piece to move.
+ * Selection is only valid during the MOVE_OR_PLACE phase and only for pieces
+ * belonging to the opponent.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number} row - The row index of the piece to select (0–3).
+ * @param {number} col - The column index of the piece to select (0–3).
+ * @returns {boolean} True if the piece at the given position can be selected.
+ */
 Orbito.canSelectPiece = function (game, row, col) {
     var piece = R.path(["board", row, col], game);
     var opponent = getOpponent(game.currentPlayer);
     return game.phase === Orbito.PHASE.MOVE_OR_PLACE && piece === opponent;
 };
 
+/**
+ * Returns whether the current player may move an opponent's piece from one
+ * position to another. The move is valid only if the piece belongs to the
+ * opponent, the target square is empty, the two positions are orthogonally
+ * adjacent, and the current phase is MOVE_OR_PLACE.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number[]} from - The [row, col] of the piece to move.
+ * @param {number[]} to - The [row, col] of the destination square.
+ * @returns {boolean} True if the move is legal.
+ */
 Orbito.canMovePiece = function (game, from, to) {
     var piece = R.path(["board", from[0], from[1]], game);
     var opponent = getOpponent(game.currentPlayer);
@@ -175,10 +286,28 @@ Orbito.canMovePiece = function (game, from, to) {
     );
 };
 
+/**
+ * Returns whether the current player may place a new piece at a given position.
+ * A piece can be placed on any empty square as long as the game has not ended.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number} row - The row index of the target position (0–3).
+ * @param {number} col - The column index of the target position (0–3).
+ * @returns {boolean} True if a piece can legally be placed at that position.
+ */
 Orbito.canPlacePiece = function (game, row, col) {
     return Orbito.isSquareEmpty(game, row, col) && !Orbito.isGameOver(game);
 };
 
+/**
+ * Returns a new board produced by rotating the current board.
+ * The outer ring of pieces moves clockwise; the inner ring moves
+ *  anti-clockwise.
+ * @private
+ * @param {Orbito.Board} board - The board to rotate.
+ * @returns {Orbito.Board} A new board reflecting the rotated positions.
+ */
 function rotateBoard(board) {
     var b = board;
     return [
@@ -189,6 +318,14 @@ function rotateBoard(board) {
     ];
 }
 
+/**
+ * Returns all rows of the board as line objects containing
+ *  coordinates and values.
+ * Used internally to check for horizontal winning conditions.
+ * @private
+ * @param {Orbito.Board} board - The board to extract rows from.
+ * @returns {Array<{coords: number[][], values: Orbito.Token_or_empty[]}>}
+ */
 function getRows(board) {
     return R.addIndex(R.map)(function (row, r) {
         return {
@@ -200,6 +337,14 @@ function getRows(board) {
     }, board);
 }
 
+/**
+ * Returns all columns of the board as line objects containing
+ *  coordinates and values.
+ * Used internally to check for vertical winning conditions.
+ * @private
+ * @param {Orbito.Board} board - The board to extract columns from.
+ * @returns {Array<{coords: number[][], values: Orbito.Token_or_empty[]}>}
+ */
 function getCols(board) {
     var transposed = R.transpose(board);
     return R.addIndex(R.map)(function (col, c) {
@@ -212,6 +357,15 @@ function getCols(board) {
     }, transposed);
 }
 
+/**
+ * Returns both diagonals of the board as line objects containing
+ *  coordinates and values.
+ * Covers the top-left to bottom-right and top-right to bottom-left diagonals.
+ * Used internally to check for diagonal winning conditions.
+ * @private
+ * @param {Orbito.Board} board - The board to extract diagonals from.
+ * @returns {Array<{coords: number[][], values: Orbito.Token_or_empty[]}>}
+ */
 function getDiagonals(board) {
     var d1 = [0, 1, 2, 3];
     var d2 = [3, 2, 1, 0];
@@ -235,6 +389,13 @@ function getDiagonals(board) {
     ];
 }
 
+/**
+ * Returns every row, column, and diagonal of the board as line objects.
+ * Used internally to check winning conditions across all directions at once.
+ * @private
+ * @param {Orbito.Board} board - The board to analyse.
+ * @returns {Array<{coords: number[][], values: Orbito.Token_or_empty[]}>}
+ */
 function getAllLines(board) {
     return R.unnest([
         getRows(board),
@@ -243,6 +404,16 @@ function getAllLines(board) {
     ]);
 }
 
+/**
+ * Inspects a (post-rotation) board for a winning state.
+ * Returns the winning player(s) and the coordinates of their winning cells,
+ * or null if no winner is found. More than one player may win simultaneously
+ * in the case of a draw caused by a mutual four-in-a-row.
+ * @private
+ * @param {Orbito.Board} board - The rotated board to inspect.
+ * @returns {{players: Orbito.Player[], winningCells: number[][]} | null}
+ *   An object describing the result, or null if no winner.
+ */
 function checkForWinner(board) {
     var lines = getAllLines(board);
     var winningLines = R.filter(function (line) {
@@ -272,6 +443,13 @@ function checkForWinner(board) {
 
 // --- 4. State Transitions ---
 
+/**
+ * Creates and returns a fresh Orbito game state with an empty 4x4 board.
+ * Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.
+ * @memberof Orbito
+ * @function
+ * @returns {Orbito.GameState} A new game state ready for play.
+ */
 Orbito.createGame = function () {
     var e = Orbito.PIECE.EMPTY;
     return {
@@ -288,6 +466,23 @@ Orbito.createGame = function () {
     };
 };
 
+/**
+ * Attempts to move an opponent's piece from one square to an adjacent
+ *  empty square.
+ * This action is only valid during the MOVE_OR_PLACE phase. On
+ *  success, the phase
+ * transitions to PLACE, requiring the current player to place a
+ *  piece before the
+ * board rotates. If the move is invalid, the original game state
+ *  is returned unchanged.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number[]} from - The [row, col] of the opponent's piece to move.
+ * @param {number[]} to - The [row, col] of the adjacent empty target square.
+ * @returns {Orbito.GameState} A new game state with the piece moved, or the
+ *   original state if the move was invalid.
+ */
 Orbito.movePiece = function (game, from, to) {
     if (!Orbito.canMovePiece(game, from, to)) {
         return game;
@@ -308,6 +503,23 @@ Orbito.movePiece = function (game, from, to) {
     return applyMove(game);
 };
 
+/**
+ * Places the current player's piece at the given position, rotates the board,
+ * checks for a winner or draw, and transitions to the next player's turn.
+ * Returns both the resulting game state and the intermediate board
+ *  state captured
+ * after placement but before rotation — used by the UI for animation.
+ * If the placement is invalid, both fields in the return value reflect
+ *  the original state.
+ * @memberof Orbito
+ * @function
+ * @param {Orbito.GameState} game - The current game state.
+ * @param {number} row - The row index at which to place the piece (0–3).
+ * @param {number} col - The column index at which to place the piece (0–3).
+ * @returns {{state: Orbito.GameState, intermediateBoard: Orbito.Board}}
+ *   An object containing the updated game state and the pre-rotation
+ *  board layout.
+ */
 Orbito.placePieceAndEndTurn = function (game, row, col) {
     if (!Orbito.canPlacePiece(game, row, col)) {
         return {

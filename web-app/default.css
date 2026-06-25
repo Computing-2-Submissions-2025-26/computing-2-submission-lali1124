@@ -20,13 +20,15 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 2px;
 }
 
 /* ─────────────────────────────
    BOARD
 ──────────────────────────── */
-
+.orbito-logo {
+    z-index: 10;
+}
 .board {
     width: 500px;
     height: 500px;
@@ -37,9 +39,9 @@ body {
     border: solid 4px #333333;
     border-radius: 20px;
     background-color: #333333;
-    transition: transform 0.4s ease-in-out;
+    transition: transform 0.2s ease-in-out;
     outline: 30px solid #A4CCC4;
-
+    margin: 0 40px;
 }
 
 @keyframes BorderGrow {
@@ -55,11 +57,13 @@ body {
 .board.player1-win {
     outline: solid #ffffff;
     animation: BorderGrow 1s ease-in-out forwards;
+    z-index: 1;
 }
 
 .board.player2-win {
     outline: solid #EE583F;
     animation: BorderGrow 1s ease-in-out forwards;
+    z-index: 1;
 }
 
 
@@ -69,7 +73,7 @@ body {
 
 .player1-turn .cell:focus-visible {
     outline: 4px solid #ffffff;
-    outline-offset: -4px;
+    outline-offset: -20px;
 }
 
 .board.player2-turn {
@@ -78,7 +82,7 @@ body {
 
 .player2-turn .cell:focus-visible {
     outline: 4px solid #EE583F;
-    outline-offset: -4px;
+    outline-offset: -20px;
 }
 
 
@@ -182,7 +186,7 @@ body {
     bottom: 0;
     outline: 4px solid #ffffff;
     /* Player 1 White */
-    outline-offset: -4px;
+    outline-offset: -20px;
     z-index: 50;
     pointer-events: none;
     border-radius: inherit;
@@ -197,7 +201,7 @@ body {
     bottom: 0;
     outline: 4px solid #EE583F;
     /* Player 2 Orange */
-    outline-offset: -4px;
+    outline-offset: -20px;
     z-index: 50;
     pointer-events: none;
     border-radius: inherit;
@@ -212,9 +216,9 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    outline: 4px solid #F8AC2F !important;
-    /* Forces yellow */
-    outline-offset: -4px;
+    outline: 4px solid #A4CCC4 !important;
+
+    outline-offset: -20px;
     z-index: 60;
     /* Higher z-index to sit above the keyboard color */
     pointer-events: none;
@@ -308,6 +312,24 @@ body {
     text-align: center;
     animation: popup-in 0.35s ease-out;
 }
+.result-popup--player1-win {
+    background: #ffffff;
+    color: #EE583F;
+    outline: #EE583F solid 8px;
+}
+
+.result-popup--player2-win {
+    background: #EE583F;
+    color: #ffffff;
+    outline: #ffffff solid 8px;
+}
+
+.result-popup--draw {
+    /* Define draw styling if needed */
+    background: #A4CCC4;
+    color: #333;
+    outline: #333 solid 8px;
+}
 
 @keyframes popup-in {
     from {
@@ -369,6 +391,7 @@ body {
     color: #ffffff;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
+    z-index: 10;
 }
 
 .control-btn:hover {
@@ -376,6 +399,27 @@ body {
 }
 
 .control-btn:active {
+    transform: scale(0.95);
+}
+.docs-btn {
+    font-family: Helvetica, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #333333;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    z-index: 10;
+}
+
+.docs-btn:hover {
+    background-color: #555555;
+}
+
+.docs-btn:active {
     transform: scale(0.95);
 }
 
@@ -392,42 +436,51 @@ body {
 }
 
 .score-box {
-    background-color: #333333;
-    color: #ffffff;
+    width: 120px;
+    height: 120px;
     border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 10;
+
+}
+.player1-score.player1-win {
+    outline: 4px solid #EE583F;
+    outline-offset: 3px;
 }
 
-.score-box h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.2rem;
-    color: #A4CCC4;
+.player2-score.player2-win {
+    outline: 4px solid #ffffff;
+    outline-offset: 3px;
 }
 
-.score-box p {
-    margin: 0;
-    font-size: 2.5rem;
-    font-weight: bold;
-}
-
-.player1-score h3 {
-    color: #ffffff;
+/* PLAYER 1: white box, red number */
+.player1-score {
+    background-color: #ffffff;
+    outline: 4px solid #EE583F;
 }
 
 .player1-score p {
-    color: #ffffff;
+    color: #EE583F;
+    margin: 0;
+    font-size: 4rem;
+    font-weight: bold;
 }
 
-.player2-score h3 {
-    color: #EE583F;
+/* PLAYER 2: red box, white number */
+.player2-score {
+    background-color: #EE583F;
+    outline: 4px solid #FFFFFF;
 }
 
 .player2-score p {
-    color: #EE583F;
+    color: #ffffff;
+    margin: 0;
+    font-size: 4rem;
+    font-weight: bold;
 }
-
 /* ─────────────────────────────
    RULES POPUP
 ──────────────────────────── */
