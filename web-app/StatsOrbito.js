@@ -69,36 +69,36 @@ StatsOrbito.record_game = function (player_1, player_2, result) {
     var p2Result = 0;
 
     switch (result) {
-        case (0):
-            p1Stats.player_1_draws += 1;
-            p2Stats.player_2_draws += 1;
-            p1Stats.current_streak = 0;
-            p2Stats.current_streak = 0;
-            p1Result = 0.5;
-            p2Result = 0.5;
-            break;
-        case (1):
-            p1Stats.player_1_wins += 1;
-            p2Stats.player_2_losses += 1;
-            p1Stats.current_streak += 1;
-            p2Stats.current_streak = 0;
-            if (p1Stats.current_streak > p1Stats.longest_streak) {
-                p1Stats.longest_streak = p1Stats.current_streak;
-            }
-            p1Result = 1;
-            p2Result = 0;
-            break;
-        case (2):
-            p1Stats.player_1_losses += 1;
-            p2Stats.player_2_wins += 1;
-            p1Stats.current_streak = 0;
-            p2Stats.current_streak += 1;
-            if (p2Stats.current_streak > p2Stats.longest_streak) {
-                p2Stats.longest_streak = p2Stats.current_streak;
-            }
-            p1Result = 0;
-            p2Result = 1;
-            break;
+    case 0:
+        p1Stats.player_1_draws += 1;
+        p2Stats.player_2_draws += 1;
+        p1Stats.current_streak = 0;
+        p2Stats.current_streak = 0;
+        p1Result = 0.5;
+        p2Result = 0.5;
+        break;
+    case 1:
+        p1Stats.player_1_wins += 1;
+        p2Stats.player_2_losses += 1;
+        p1Stats.current_streak += 1;
+        p2Stats.current_streak = 0;
+        if (p1Stats.current_streak > p1Stats.longest_streak) {
+            p1Stats.longest_streak = p1Stats.current_streak;
+        }
+        p1Result = 1;
+        p2Result = 0;
+        break;
+    case 2:
+        p1Stats.player_1_losses += 1;
+        p2Stats.player_2_wins += 1;
+        p1Stats.current_streak = 0;
+        p2Stats.current_streak += 1;
+        if (p2Stats.current_streak > p2Stats.longest_streak) {
+            p2Stats.longest_streak = p2Stats.current_streak;
+        }
+        p1Result = 0;
+        p2Result = 1;
+        break;
     }
 
     var newP1Elo = elo(p1Stats.elo, p2Stats.elo, p1Result);
