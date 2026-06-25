@@ -292,7 +292,6 @@ body {
     /* hidden by default, toggled via JS */
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
     z-index: 5000;
     justify-content: center;
     align-items: center;
@@ -303,11 +302,10 @@ body {
 }
 
 .result-popup {
-    background: #ffffff;
+    background: #A4CCC4;
     border-radius: 20px;
     padding: 40px 56px;
     text-align: center;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
     animation: popup-in 0.35s ease-out;
 }
 
@@ -338,14 +336,14 @@ body {
     padding: 12px 36px;
     border: none;
     border-radius: 12px;
-    background-color: #333333;
-    color: #ffffff;
+    background-color: #FFFFFF;
+    color: #333333;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
 .result-popup__button:hover {
-    background-color: #555555;
+    background-color: #AAAAAA;
 }
 
 /* ─────────────────────────────
@@ -400,7 +398,6 @@ body {
     padding: 20px;
     text-align: center;
     min-width: 120px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .score-box h3 {
@@ -436,9 +433,8 @@ body {
 ──────────────────────────── */
 
 .rules-popup {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 40px;
+    border-radius: 0px;
+    padding: 0px;
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
@@ -463,11 +459,11 @@ body {
     border: none;
     font-size: 2rem;
     line-height: 1;
-    color: #333333;
+    color: #FFFFFF;
     cursor: pointer;
     padding: 0;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
