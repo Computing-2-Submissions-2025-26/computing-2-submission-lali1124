@@ -1,23 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: Orbito</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <title>Orbito - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Namespace: Orbito</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Orbito.html">Orbito</a><ul class='members'><li data-type='member'><a href="Orbito.html#.PHASE">PHASE</a></li><li data-type='member'><a href="Orbito.html#.PIECE">PIECE</a></li><li data-type='member'><a href="Orbito.html#.ROTATION_MAP">ROTATION_MAP</a></li><li data-type='member'><a href="Orbito.html#.token_strings">token_strings</a></li></ul><ul class='methods'><li data-type='method'><a href="Orbito.html#.canMovePiece">canMovePiece</a></li><li data-type='method'><a href="Orbito.html#.canPlacePiece">canPlacePiece</a></li><li data-type='method'><a href="Orbito.html#.canSelectPiece">canSelectPiece</a></li><li data-type='method'><a href="Orbito.html#.createGame">createGame</a></li><li data-type='method'><a href="Orbito.html#.isGameOver">isGameOver</a></li><li data-type='method'><a href="Orbito.html#.isSquareAdjacent">isSquareAdjacent</a></li><li data-type='method'><a href="Orbito.html#.isSquareEmpty">isSquareEmpty</a></li><li data-type='method'><a href="Orbito.html#.movePiece">movePiece</a></li><li data-type='method'><a href="Orbito.html#.placePieceAndEndTurn">placePieceAndEndTurn</a></li><li data-type='method'><a href="Orbito.html#.to_string">to_string</a></li><li data-type='method'><a href="Orbito.html#.to_string_with_tokens">to_string_with_tokens</a></li></ul></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Orbito</h1>
+    
 
     
 
@@ -28,24 +47,45 @@
 
 <header>
     
-        <h2>Orbito</h2>
+        <h2>
+        
+            Namespace
+        
+        </h2>
         
     
 </header>
 
 <article>
-    <div class="container-overview">
     
+        <div class="container-overview">
         
-            <div class="description">Orbito.js is a module to model and play the board game "Orbito".
-In Orbito, players place pieces and the board rotates,
-aiming to get 4 in a row.</div>
-        
+            
 
-        
+
+    
+
+    <h4 class="name" id="Orbito">Orbito</h4>
+
+    
+
+
 
 
 <dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Orbito.js is a module to model and play the board game &quot;Orbito&quot;.
+In Orbito, players place pieces and the board rotates,
+aiming to get 4 in a row.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
 
     
     <dt class="tag-version">Version:</dt>
@@ -82,13 +122,6 @@ aiming to get 4 in a row.</div>
     
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
 
     
 
@@ -96,10 +129,36 @@ aiming to get 4 in a row.</div>
 </dl>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
-    
-    </div>
-
+        </div>
     
 
     
@@ -107,8 +166,10 @@ aiming to get 4 in a row.</div>
     
 
     
-
     
+    
+
+     
 
     
 
@@ -117,59 +178,20 @@ aiming to get 4 in a row.</div>
 
         
             
-<h4 class="name" id=".PHASE"><span class="type-signature">(static, readonly) </span>PHASE<span class="type-signature"> :string</span></h4>
-
-
-
-
-<div class="description">
-    Constants for the turn phases.
-In the MOVE_OR_PLACE phase, the current player may optionally move one of the
-opponent's pieces to an adjacent empty square before placing their own piece.
-In the PLACE phase, the player must place a piece immediately, having
- already moved one.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
+<h4 class="name" id=".PHASE"><span class="type-signature type-signature-static, readonly">(static, readonly) </span>PHASE<span class="type-signature"> :string</span></h4>
 
 
 
 
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Constants for the turn phases.
+In the MOVE_OR_PLACE phase, the current player may optionally move one of the
+opponent's pieces to an adjacent empty square before placing their own piece.
+In the PLACE phase, the player must place a piece immediately, having
+already moved one.</p></li></ul></dd>
     
 
     
@@ -184,31 +206,52 @@ In the PLACE phase, the player must place a piece immediately, having
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
 
 
 
-
-        
-            
-<h4 class="name" id=".PIECE"><span class="type-signature">(static, readonly) </span>PIECE<span class="type-signature"> :number</span></h4>
-
-
-
-
-<div class="description">
-    Constants for the game pieces.
+<div class="description usertext">
+    <p>Constants for the turn phases.
+In the MOVE_OR_PLACE phase, the current player may optionally move one of the
+opponent's pieces to an adjacent empty square before placing their own piece.
+In the PLACE phase, the player must place a piece immediately, having
+already moved one.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
+    <h5 class="h5-types">Type:</h5>
     <ul>
         <li>
             
-<span class="param-type">number</span>
+<span class="param-type">string</span>
+
 
 
         </li>
@@ -218,30 +261,19 @@ In the PLACE phase, the player must place a piece immediately, having
 
 
 
+
+        
+            
+<h4 class="name" id=".PIECE"><span class="type-signature type-signature-static, readonly">(static, readonly) </span>PIECE<span class="type-signature"> :number</span></h4>
+
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Constants for the game pieces.</p></li></ul></dd>
     
 
     
@@ -256,35 +288,48 @@ In the PLACE phase, the player must place a piece immediately, having
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
 
 
 
-
-        
-            
-<h4 class="name" id=".ROTATION_MAP"><span class="type-signature">(static, readonly) </span>ROTATION_MAP<span class="type-signature"> :Array.&lt;Array.&lt;Array.&lt;number>>></span></h4>
-
-
-
-
-<div class="description">
-    Coordinate mapping representing how pieces shift when the board rotates.
-Each entry is a pair [[fromRow, fromCol], [toRow, toCol]] describing where
-a piece at the first coordinate moves to after rotation.
-The outer ring rotates clockwise and the inner ring rotates anti-clockwise.
-Exported so the UI can safely animate paths without recalculating game logic.
+<div class="description usertext">
+    <p>Constants for the game pieces.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
+    <h5 class="h5-types">Type:</h5>
     <ul>
         <li>
             
-<span class="param-type">Array.&lt;Array.&lt;Array.&lt;number>>></span>
+<span class="param-type">number</span>
+
 
 
         </li>
@@ -294,30 +339,23 @@ Exported so the UI can safely animate paths without recalculating game logic.
 
 
 
+
+        
+            
+<h4 class="name" id=".ROTATION_MAP"><span class="type-signature type-signature-static, readonly">(static, readonly) </span>ROTATION_MAP<span class="type-signature"> :Array.&lt;Array.&lt;Array.&lt;number>>></span></h4>
+
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Coordinate mapping representing how pieces shift when the board rotates.
+Each entry is a pair [[fromRow, fromCol], [toRow, toCol]] describing where
+a piece at the first coordinate moves to after rotation.
+The outer ring rotates clockwise and the inner ring rotates anti-clockwise.
+Exported so the UI can safely animate paths without recalculating game logic.</p></li></ul></dd>
     
 
     
@@ -332,31 +370,52 @@ Exported so the UI can safely animate paths without recalculating game logic.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
 
 
 
-
-        
-            
-<h4 class="name" id=".token_strings"><span class="type-signature">(static) </span>token_strings<span class="type-signature"> :Array.&lt;string></span></h4>
-
-
-
-
-<div class="description">
-    A set of template strings for visually printing the board to the console.
+<div class="description usertext">
+    <p>Coordinate mapping representing how pieces shift when the board rotates.
+Each entry is a pair [[fromRow, fromCol], [toRow, toCol]] describing where
+a piece at the first coordinate moves to after rotation.
+The outer ring rotates clockwise and the inner ring rotates anti-clockwise.
+Exported so the UI can safely animate paths without recalculating game logic.</p>
 </div>
 
 
 
-    <h5>Type:</h5>
+    <h5 class="h5-types">Type:</h5>
     <ul>
         <li>
             
-<span class="param-type">Array.&lt;string></span>
+<span class="param-type">Array.&lt;Array.&lt;Array.&lt;number>>></span>
+
 
 
         </li>
@@ -366,30 +425,19 @@ Exported so the UI can safely animate paths without recalculating game logic.
 
 
 
+
+        
+            
+<h4 class="name" id=".token_strings"><span class="type-signature type-signature-static">(static) </span>token_strings<span class="type-signature"> :Array.&lt;string></span></h4>
+
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>A set of template strings for visually printing the board to the console.</p></li></ul></dd>
     
 
     
@@ -404,7 +452,52 @@ Exported so the UI can safely animate paths without recalculating game logic.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>A set of template strings for visually printing the board to the console.</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;string></span>
+
+
+
+        </li>
+    </ul>
 
 
 
@@ -422,152 +515,20 @@ Exported so the UI can safely animate paths without recalculating game logic.
 
     
 
-    
-    <h4 class="name" id=".canMovePiece"><span class="type-signature">(static) </span>canMovePiece<span class="signature">(game, from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
+    <h4 class="name" id=".canMovePiece"><span class="type-signature type-signature-static">(static) </span>canMovePiece<span class="signature">(game, from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
-
-
-
-<div class="description">
-    Returns whether the current player may move an opponent's piece from one
-position to another. The move is valid only if the piece belongs to the
-opponent, the target square is empty, the two positions are orthogonally
-adjacent, and the current phase is MOVE_OR_PLACE.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>game</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The current game state.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>from</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The [row, col] of the piece to move.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The [row, col] of the destination square.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether the current player may move an opponent's piece from one
+position to another. The move is valid only if the piece belongs to the
+opponent, the target square is empty, the two positions are orthogonally
+adjacent, and the current phase is MOVE_OR_PLACE.</p></li></ul></dd>
     
 
     
@@ -582,6 +543,30 @@ adjacent, and the current phase is MOVE_OR_PLACE.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -596,62 +581,7 @@ adjacent, and the current phase is MOVE_OR_PLACE.
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the move is legal.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".canPlacePiece"><span class="type-signature">(static) </span>canPlacePiece<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns whether the current player may place a new piece at a given position.
-A piece can be placed on any empty square as long as the game has not ended.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -685,6 +615,7 @@ A piece can be placed on any empty square as long as the game has not ended.
 <span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
 
 
+
             
             </td>
 
@@ -692,20 +623,21 @@ A piece can be placed on any empty square as long as the game has not ended.
 
             
 
-            <td class="description last">The current game state.</td>
+            <td class="description last"><p>The current game state.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>row</code></td>
+                <td class="name"><code>from</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Array.&lt;number></span>
+
 
 
             
@@ -715,20 +647,21 @@ A piece can be placed on any empty square as long as the game has not ended.
 
             
 
-            <td class="description last">The row index of the target position (0–3).</td>
+            <td class="description last"><p>The [row, col] of the piece to move.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>col</code></td>
+                <td class="name"><code>to</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Array.&lt;number></span>
+
 
 
             
@@ -738,7 +671,7 @@ A piece can be placed on any empty square as long as the game has not ended.
 
             
 
-            <td class="description last">The column index of the target position (0–3).</td>
+            <td class="description last"><p>The [row, col] of the destination square.</p></td>
         </tr>
 
     
@@ -750,30 +683,59 @@ A piece can be placed on any empty square as long as the game has not ended.
 
 
 
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if the move is legal.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".canPlacePiece"><span class="type-signature type-signature-static">(static) </span>canPlacePiece<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether the current player may place a new piece at a given position.
+A piece can be placed on any empty square as long as the game has not ended.</p></li></ul></dd>
     
 
     
@@ -788,6 +750,30 @@ A piece can be placed on any empty square as long as the game has not ended.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -802,63 +788,7 @@ A piece can be placed on any empty square as long as the game has not ended.
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if a piece can legally be placed at that position.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".canSelectPiece"><span class="type-signature">(static) </span>canSelectPiece<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns whether the current player may select an opponent's piece to move.
-Selection is only valid during the MOVE_OR_PLACE phase and only for pieces
-belonging to the opponent.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -892,6 +822,7 @@ belonging to the opponent.
 <span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
 
 
+
             
             </td>
 
@@ -899,7 +830,7 @@ belonging to the opponent.
 
             
 
-            <td class="description last">The current game state.</td>
+            <td class="description last"><p>The current game state.</p></td>
         </tr>
 
     
@@ -915,6 +846,7 @@ belonging to the opponent.
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -922,7 +854,7 @@ belonging to the opponent.
 
             
 
-            <td class="description last">The row index of the piece to select (0–3).</td>
+            <td class="description last"><p>The row index of the target position (0–3).</p></td>
         </tr>
 
     
@@ -938,6 +870,7 @@ belonging to the opponent.
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -945,7 +878,7 @@ belonging to the opponent.
 
             
 
-            <td class="description last">The column index of the piece to select (0–3).</td>
+            <td class="description last"><p>The column index of the target position (0–3).</p></td>
         </tr>
 
     
@@ -957,30 +890,60 @@ belonging to the opponent.
 
 
 
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if a piece can legally be placed at that position.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".canSelectPiece"><span class="type-signature type-signature-static">(static) </span>canSelectPiece<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether the current player may select an opponent's piece to move.
+Selection is only valid during the MOVE_OR_PLACE phase and only for pieces
+belonging to the opponent.</p></li></ul></dd>
     
 
     
@@ -995,6 +958,30 @@ belonging to the opponent.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -1009,24 +996,135 @@ belonging to the opponent.
 
 
 
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
 
 
-<h5>Returns:</h5>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current game state.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The row index of the piece to select (0–3).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>col</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The column index of the piece to select (0–3).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    True if the piece at the given position can be selected.
+    <p>True if the piece at the given position can be selected.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
     <dd>
         
 <span class="param-type">boolean</span>
+
 
 
     </dd>
@@ -1036,62 +1134,23 @@ belonging to the opponent.
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id=".createGame"><span class="type-signature">(static) </span>createGame<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Orbito.html#.GameState">Orbito.GameState</a>}</span></h4>
-    
+    <h4 class="name" id=".createGame"><span class="type-signature type-signature-static">(static) </span>createGame<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Orbito.html#.GameState">Orbito.GameState</a>}</span></h4>
 
     
-
-
-
-<div class="description">
-    Creates and returns a fresh Orbito game state with an empty 4x4 board.
-Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.
-</div>
-
-
-
-
-
-
-
-
-
 
 
 
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Creates and returns a fresh Orbito game state with an empty 4x4 board.
+Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.</p></li></ul></dd>
     
 
     
@@ -1106,6 +1165,30 @@ Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -1122,22 +1205,35 @@ Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.
 
 
 
-<h5>Returns:</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    A new game state ready for play.
+    <p>A new game state ready for play.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
     <dd>
         
 <span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
+
 
 
     </dd>
@@ -1147,111 +1243,23 @@ Player 1 takes the first turn, and the phase begins as MOVE_OR_PLACE.
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id=".isGameOver"><span class="type-signature">(static) </span>isGameOver<span class="signature">(game)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
+    <h4 class="name" id=".isGameOver"><span class="type-signature type-signature-static">(static) </span>isGameOver<span class="signature">(game)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
-
-
-
-<div class="description">
-    Returns whether the game has ended, either because a player has won or the
-board has been filled without a winner (a draw).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>game</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The current game state.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
 
 
 
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether the game has ended, either because a player has won or the
+board has been filled without a winner (a draw).</p></li></ul></dd>
     
 
     
@@ -1266,6 +1274,30 @@ board has been filled without a winner (a draw).
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -1280,63 +1312,7 @@ board has been filled without a winner (a draw).
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the game is over.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".isSquareAdjacent"><span class="type-signature">(static) </span>isSquareAdjacent<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns whether two board positions are orthogonally adjacent.
-Two positions are adjacent if they differ by exactly one row or one column,
-but not both — diagonal adjacency is not permitted.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -1361,13 +1337,14 @@ but not both — diagonal adjacency is not permitted.
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>game</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;number></span>
+<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
+
 
 
             
@@ -1377,30 +1354,7 @@ but not both — diagonal adjacency is not permitted.
 
             
 
-            <td class="description last">The [row, col] of the starting position.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;number></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The [row, col] of the target position.</td>
+            <td class="description last"><p>The current game state.</p></td>
         </tr>
 
     
@@ -1412,30 +1366,60 @@ but not both — diagonal adjacency is not permitted.
 
 
 
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if the game is over.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isSquareAdjacent"><span class="type-signature type-signature-static">(static) </span>isSquareAdjacent<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether two board positions are orthogonally adjacent.
+Two positions are adjacent if they differ by exactly one row or one column,
+but not both — diagonal adjacency is not permitted.</p></li></ul></dd>
     
 
     
@@ -1450,6 +1434,30 @@ but not both — diagonal adjacency is not permitted.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -1464,61 +1472,7 @@ but not both — diagonal adjacency is not permitted.
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the two positions are orthogonally adjacent.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".isSquareEmpty"><span class="type-signature">(static) </span>isSquareEmpty<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Returns whether a given board position contains no piece.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -1539,241 +1493,6 @@ but not both — diagonal adjacency is not permitted.
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>game</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The current game state.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row index to check (0–3).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>col</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The column index to check (0–3).</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line214">line 214</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the position is empty.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".movePiece"><span class="type-signature">(static) </span>movePiece<span class="signature">(game, from, to)</span><span class="type-signature"> &rarr; {<a href="Orbito.html#.GameState">Orbito.GameState</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Attempts to move an opponent's piece from one square to an adjacent
- empty square.
-This action is only valid during the MOVE_OR_PLACE phase. On
- success, the phase
-transitions to PLACE, requiring the current player to place a
- piece before the
-board rotates. If the move is invalid, the original game state
- is returned unchanged.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>game</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The current game state.</td>
-        </tr>
-
     
 
         <tr>
@@ -1787,6 +1506,7 @@ board rotates. If the move is invalid, the original game state
 <span class="param-type">Array.&lt;number></span>
 
 
+
             
             </td>
 
@@ -1794,7 +1514,7 @@ board rotates. If the move is invalid, the original game state
 
             
 
-            <td class="description last">The [row, col] of the opponent's piece to move.</td>
+            <td class="description last"><p>The [row, col] of the starting position.</p></td>
         </tr>
 
     
@@ -1810,6 +1530,7 @@ board rotates. If the move is invalid, the original game state
 <span class="param-type">Array.&lt;number></span>
 
 
+
             
             </td>
 
@@ -1817,7 +1538,7 @@ board rotates. If the move is invalid, the original game state
 
             
 
-            <td class="description last">The [row, col] of the adjacent empty target square.</td>
+            <td class="description last"><p>The [row, col] of the target position.</p></td>
         </tr>
 
     
@@ -1829,45 +1550,6 @@ board rotates. If the move is invalid, the original game state
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line486">line 486</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -1878,28 +1560,23 @@ board rotates. If the move is invalid, the original game state
 
 
 
-
-
-
-
-
-<h5>Returns:</h5>
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    A new game state with the piece moved, or the
-  original state if the move was invalid.
+    <p>True if the two positions are orthogonally adjacent.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
     <dd>
         
-<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
+<span class="param-type">boolean</span>
+
 
 
     </dd>
@@ -1909,30 +1586,61 @@ board rotates. If the move is invalid, the original game state
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id=".placePieceAndEndTurn"><span class="type-signature">(static) </span>placePieceAndEndTurn<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-    
+    <h4 class="name" id=".isSquareEmpty"><span class="type-signature type-signature-static">(static) </span>isSquareEmpty<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
 
 
-<div class="description">
-    Places the current player's piece at the given position, rotates the board,
-checks for a winner or draw, and transitions to the next player's turn.
-Returns both the resulting game state and the intermediate board
- state captured
-after placement but before rotation — used by the UI for animation.
-If the placement is invalid, both fields in the return value reflect
- the original state.
-</div>
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns whether a given board position contains no piece.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -1942,7 +1650,11 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-    <h5>Parameters:</h5>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -1976,6 +1688,7 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
 
 
+
             
             </td>
 
@@ -1983,7 +1696,7 @@ If the placement is invalid, both fields in the return value reflect
 
             
 
-            <td class="description last">The current game state.</td>
+            <td class="description last"><p>The current game state.</p></td>
         </tr>
 
     
@@ -1999,6 +1712,7 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -2006,7 +1720,7 @@ If the placement is invalid, both fields in the return value reflect
 
             
 
-            <td class="description last">The row index at which to place the piece (0–3).</td>
+            <td class="description last"><p>The row index to check (0–3).</p></td>
         </tr>
 
     
@@ -2022,6 +1736,7 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type">number</span>
 
 
+
             
             </td>
 
@@ -2029,7 +1744,7 @@ If the placement is invalid, both fields in the return value reflect
 
             
 
-            <td class="description last">The column index at which to place the piece (0–3).</td>
+            <td class="description last"><p>The column index to check (0–3).</p></td>
         </tr>
 
     
@@ -2041,8 +1756,72 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if the position is empty.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".movePiece"><span class="type-signature type-signature-static">(static) </span>movePiece<span class="signature">(game, from, to)</span><span class="type-signature"> &rarr; {<a href="Orbito.html#.GameState">Orbito.GameState</a>}</span></h4>
+
+    
+
+
+
+
 <dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Attempts to move an opponent's piece from one square to an adjacent
+empty square.
+This action is only valid during the MOVE_OR_PLACE phase. On
+success, the phase
+transitions to PLACE, requiring the current player to place a
+piece before the
+board rotates. If the move is invalid, the original game state
+is returned unchanged.</p></li></ul></dd>
+    
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line486">line 486</a>
+    </li></ul></dd>
     
 
     
@@ -2065,6 +1844,190 @@ If the placement is invalid, both fields in the return value reflect
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current game state.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The [row, col] of the opponent's piece to move.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;number></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The [row, col] of the adjacent empty target square.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new game state with the piece moved, or the
+original state if the move was invalid.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".placePieceAndEndTurn"><span class="type-signature type-signature-static">(static) </span>placePieceAndEndTurn<span class="signature">(game, row, col)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Places the current player's piece at the given position, rotates the board,
+checks for a winner or draw, and transitions to the next player's turn.
+Returns both the resulting game state and the intermediate board
+state captured
+after placement but before rotation — used by the UI for animation.
+If the placement is invalid, both fields in the return value reflect
+the original state.</p></li></ul></dd>
     
 
     
@@ -2079,6 +2042,30 @@ If the placement is invalid, both fields in the return value reflect
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
 
 
@@ -2093,25 +2080,136 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>game</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Orbito.html#.GameState">Orbito.GameState</a></span>
 
 
-<h5>Returns:</h5>
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current game state.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The row index at which to place the piece (0–3).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>col</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The column index at which to place the piece (0–3).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    An object containing the updated game state and the pre-rotation
- board layout.
+    <p>An object containing the updated game state and the pre-rotation
+board layout.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
     <dd>
         
 <span class="param-type">Object</span>
+
 
 
     </dd>
@@ -2121,24 +2219,61 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id=".to_string"><span class="type-signature">(static) </span>to_string<span class="signature">(board)</span><span class="type-signature"> &rarr; {string}</span></h4>
-    
+    <h4 class="name" id=".to_string"><span class="type-signature type-signature-static">(static) </span>to_string<span class="signature">(board)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
-<div class="description">
-    Returns a string representation of a board for the console.
-</div>
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns a string representation of a board for the console.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line201">line 201</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -2148,7 +2283,11 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-    <h5>Parameters:</h5>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -2182,6 +2321,7 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type"><a href="Orbito.html#.Board">Orbito.Board</a></span>
 
 
+
             
             </td>
 
@@ -2189,7 +2329,7 @@ If the placement is invalid, both fields in the return value reflect
 
             
 
-            <td class="description last">The board to represent.</td>
+            <td class="description last"><p>The board to represent.</p></td>
         </tr>
 
     
@@ -2201,45 +2341,6 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line201">line 201</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2250,27 +2351,23 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-
-
-
-
-
-<h5>Returns:</h5>
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    The string representation.
+    <p>The string representation.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
     <dd>
         
 <span class="param-type">string</span>
+
 
 
     </dd>
@@ -2280,24 +2377,61 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-
-
         
             
 
     
 
-    
-    <h4 class="name" id=".to_string_with_tokens"><span class="type-signature">(static) </span>to_string_with_tokens<span class="signature">(token_strings)</span><span class="type-signature"> &rarr; {function}</span></h4>
-    
+    <h4 class="name" id=".to_string_with_tokens"><span class="type-signature type-signature-static">(static) </span>to_string_with_tokens<span class="signature">(token_strings)</span><span class="type-signature"> &rarr; {function}</span></h4>
 
     
 
 
 
-<div class="description">
-    Returns a string representation function mapping tokens to provided strings.
-</div>
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Returns a string representation function mapping tokens to provided strings.</p></li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line184">line 184</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -2307,7 +2441,11 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-    <h5>Parameters:</h5>
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
     
 
 <table class="params">
@@ -2341,6 +2479,7 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type">Array.&lt;string></span>
 
 
+
             
             </td>
 
@@ -2348,7 +2487,7 @@ If the placement is invalid, both fields in the return value reflect
 
             
 
-            <td class="description last">The array of strings mapping to [0, 1, 2].</td>
+            <td class="description last"><p>The array of strings mapping to [0, 1, 2].</p></td>
         </tr>
 
     
@@ -2360,45 +2499,6 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line184">line 184</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
@@ -2409,21 +2509,16 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-
-
-
-
-
-<h5>Returns:</h5>
+<h5 class="h5-returns">Returns:</h5>
 
         
 <div class="param-desc">
-    The string representation function.
+    <p>The string representation function.</p>
 </div>
 
 
 
-<dl>
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -2432,12 +2527,11 @@ If the placement is invalid, both fields in the return value reflect
 <span class="param-type">function</span>
 
 
+
     </dd>
 </dl>
 
     
-
-
 
 
 
@@ -2454,51 +2548,12 @@ If the placement is invalid, both fields in the return value reflect
 
 
 
-<div class="description">
-    A Board is a 4x4 grid that pieces are placed into and moved around on.
-It is implemented as a 2D array of rows containing tokens or empty positions.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array.&lt;Array.&lt;<a href="Orbito.html#.Token_or_empty">Orbito.Token_or_empty</a>>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>A Board is a 4x4 grid that pieces are placed into and moved around on.
+It is implemented as a 2D array of rows containing tokens or empty positions.</p></li></ul></dd>
     
 
     
@@ -2513,7 +2568,53 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>A Board is a 4x4 grid that pieces are placed into and moved around on.
+It is implemented as a 2D array of rows containing tokens or empty positions.</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;Array.&lt;<a href="Orbito.html#.Token_or_empty">Orbito.Token_or_empty</a>>></span>
+
+
+
+        </li>
+    </ul>
 
 
 
@@ -2527,23 +2628,50 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
 
 
-<div class="description">
-    A full snapshot of an in-progress or completed Orbito game.
-</div>
 
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>A full snapshot of an in-progress or completed Orbito game.</p></li></ul></dd>
+    
 
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
+    
 
+    
 
-        </li>
-    </ul>
+    
 
+    
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -2582,6 +2710,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type"><a href="Orbito.html#.Board">Orbito.Board</a></span>
 
 
+
             
             </td>
 
@@ -2589,7 +2718,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">The current 4x4 game board.</td>
+            <td class="description last"><p>The current 4x4 game board.</p></td>
         </tr>
 
     
@@ -2605,6 +2734,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type">string</span>
 
 
+
             
             </td>
 
@@ -2612,8 +2742,8 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">The current turn phase; one of
- <a href="Orbito.html#.PHASE">Orbito.PHASE</a>.</td>
+            <td class="description last"><p>The current turn phase; one of
+<a href="Orbito.html#.PHASE"><code>Orbito.PHASE</code></a>.</p></td>
         </tr>
 
     
@@ -2629,6 +2759,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type"><a href="Orbito.html#.Player">Orbito.Player</a></span>
 
 
+
             
             </td>
 
@@ -2636,8 +2767,8 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">The player whose turn it currently
- is.</td>
+            <td class="description last"><p>The player whose turn it currently
+is.</p></td>
         </tr>
 
     
@@ -2656,6 +2787,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type">null</span>
 
 
+
             
             </td>
 
@@ -2663,8 +2795,8 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">The winning player, or null if the
- game is ongoing.</td>
+            <td class="description last"><p>The winning player, or null if the
+game is ongoing.</p></td>
         </tr>
 
     
@@ -2680,6 +2812,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type">boolean</span>
 
 
+
             
             </td>
 
@@ -2687,7 +2820,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">True if the game has ended in a draw.</td>
+            <td class="description last"><p>True if the game has ended in a draw.</p></td>
         </tr>
 
     
@@ -2706,6 +2839,7 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 <span class="param-type">null</span>
 
 
+
             
             </td>
 
@@ -2713,9 +2847,9 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
             
 
-            <td class="description last">Coordinates of cells forming the
- winning line,
-  or null if there is no winner yet.</td>
+            <td class="description last"><p>Coordinates of cells forming the
+winning line,
+or null if there is no winner yet.</p></td>
         </tr>
 
     
@@ -2725,45 +2859,24 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
 
 
-<dl class="details">
 
-    
 
-    
+<div class="description usertext">
+    <p>A full snapshot of an in-progress or completed Orbito game.</p>
+</div>
 
-    
 
-    
 
-    
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
 
-    
 
-    
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="orbito.js.html">orbito.js</a>, <a href="orbito.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
+        </li>
+    </ul>
 
 
 
@@ -2777,53 +2890,11 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
 
 
-<div class="description">
-    Represents a player in the game.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">1</span>
-|
-
-<span class="param-type">2</span>
-
-
-        </li>
-    </ul>
-
-
-
-
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Represents a player in the game.</p></li></ul></dd>
     
 
     
@@ -2838,7 +2909,55 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Represents a player in the game.</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">1</span>
+|
+
+<span class="param-type">2</span>
+
+
+
+        </li>
+    </ul>
 
 
 
@@ -2852,56 +2971,11 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
 
 
-<div class="description">
-    Either a player token (1 or 2) or an empty position (0).
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">1</span>
-|
-
-<span class="param-type">2</span>
-|
-
-<span class="param-type">0</span>
-
-
-        </li>
-    </ul>
-
-
-
-
 
 <dl class="details">
-
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>Either a player token (1 or 2) or an empty position (0).</p></li></ul></dd>
     
 
     
@@ -2916,7 +2990,58 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
     
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Either a player token (1 or 2) or an empty position (0).</p>
+</div>
+
+
+
+    <h5 class="h5-types">Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">1</span>
+|
+
+<span class="param-type">2</span>
+|
+
+<span class="param-type">0</span>
+
+
+
+        </li>
+    </ul>
 
 
 
@@ -2934,19 +3059,23 @@ It is implemented as a 2D array of rows containing tokens or empty positions.
 
 
 
+    
+    
 </div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Orbito.html">Orbito</a></li></ul>
-</nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 08:28:23 GMT+0100 (British Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.5</a> on Thu Jun 25 2026 09:12:57 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+    <link type="text/css" rel="stylesheet" href="custom.css">
+    
 </body>
 </html>
