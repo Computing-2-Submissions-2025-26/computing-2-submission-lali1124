@@ -92,11 +92,11 @@ var isBoardFull = R.pipe(
 );
 
 function getOpponent(player) {
-    return (
-        player === Orbito.PIECE.PLAYER_1
-            ? Orbito.PIECE.PLAYER_2
-            : Orbito.PIECE.PLAYER_1
-    );
+    if (player === Orbito.PIECE.PLAYER_1) {
+        return Orbito.PIECE.PLAYER_2;
+    }
+
+    return Orbito.PIECE.PLAYER_1;
 }
 
 // --- 2. Stringification (For debugging & tests) ---

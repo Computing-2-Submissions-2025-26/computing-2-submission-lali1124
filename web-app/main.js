@@ -1,8 +1,7 @@
-/*jslint browser */
 import Orbito from "./orbito.js";
 import StatsOrbito from "./StatsOrbito.js";
 
-export var initUI = Object.freeze(function initUI() {
+const initUI = Object.freeze(function initUI() {
     var gameState = Orbito.createGame();
     var selectedCell = null;
     var animating = false;
@@ -39,8 +38,12 @@ export var initUI = Object.freeze(function initUI() {
 
     // --- HELPERS ---
 
-    function cellIndex(r, c) { return (r * 4) + c; }
-    function getCellRect(r, c) { return cells[cellIndex(r, c)].getBoundingClientRect(); }
+    function cellIndex(r, c) {
+        return (r * 4) + c;
+    }
+    function getCellRect(r, c) {
+        return cells[cellIndex(r, c)].getBoundingClientRect();
+    }
 
     function render() {
         cells.forEach(function (cell, index) {
@@ -68,7 +71,11 @@ export var initUI = Object.freeze(function initUI() {
             }
 
             // Highlight if selected for a move
-            if (selectedCell && selectedCell[0] === r && selectedCell[1] === c) {
+            if (
+                selectedCell &&
+                selectedCell[0] === r &&
+                selectedCell[1] === c
+            ) {
                 cell.classList.add("cell--dragging");
             }
 
@@ -101,7 +108,10 @@ export var initUI = Object.freeze(function initUI() {
         }
 
         if (logoEl) {
-            if (gameState.currentPlayer === 2 && !Orbito.isGameOver(gameState)) {
+            if (
+                gameState.currentPlayer === 2 &&
+                !Orbito.isGameOver(gameState)
+            ) {
                 logoEl.src = "assets/ORBITO_p2.svg";
             } else {
                 logoEl.src = "assets/ORBITO.svg";
@@ -118,12 +128,20 @@ export var initUI = Object.freeze(function initUI() {
             var pieceH = fromRect.height * 0.7;
 
             var clone = document.createElement("div");
-            var speedClass = fast ? "piece--animating-fast" : "piece--animating";
+            var speedClass = (
+                fast
+                ? "piece--animating-fast"
+                : "piece--animating"
+            );
             var startX = fromRect.left + (fromRect.width - pieceW) / 2;
             var startY = fromRect.top + (fromRect.height - pieceH) / 2;
             var dx = toRect.left - startX + (toRect.width - pieceW) / 2;
             var dy = toRect.top - startY + (toRect.height - pieceH) / 2;
-            var timeoutMs = fast ? 150 : 500;
+            var timeoutMs = (
+                fast
+                ? 150
+                : 500
+            );
 
             clone.className = "piece " + speedClass + " " + playerClass;
             clone.style.width = pieceW + "px";
@@ -138,12 +156,16 @@ export var initUI = Object.freeze(function initUI() {
             clone.style.transform = "translate(" + dx + "px, " + dy + "px)";
 
             clone.addEventListener("transitionend", function () {
-                if (clone.parentNode) { clone.remove(); }
+                if (clone.parentNode) {
+                    clone.remove();
+                }
                 resolve();
-            }, { once: true });
+            }, {once: true});
 
             setTimeout(function () {
-                if (clone.parentNode) { clone.remove(); }
+                if (clone.parentNode) {
+                    clone.remove();
+                }
                 resolve();
             }, timeoutMs);
         });
@@ -168,7 +190,14 @@ export var initUI = Object.freeze(function initUI() {
 
             if (value !== Orbito.PIECE.EMPTY) {
                 promises.push(
-                    animateSlide(oldR, oldC, newR, newC, "player" + value, false)
+                    animateSlide(
+                        oldR,
+                        oldC,
+                        newR,
+                        newC,
+                        "player" + value,
+                        false
+                    )
                 );
             }
         });
@@ -213,7 +242,9 @@ export var initUI = Object.freeze(function initUI() {
             gameState = Orbito.createGame();
             selectedCell = null;
             render();
-            if (cells.length > 0) { cells[0].focus(); }
+            if (cells.length > 0) {
+                cells[0].focus();
+            }
         };
     }
 
@@ -223,7 +254,9 @@ export var initUI = Object.freeze(function initUI() {
             gameState = Orbito.createGame();
             selectedCell = null;
             render();
-            if (cells.length > 0) { cells[0].focus(); }
+            if (cells.length > 0) {
+                cells[0].focus();
+            }
         };
     }
 
@@ -236,7 +269,9 @@ export var initUI = Object.freeze(function initUI() {
     if (rulesCloseBtn && rulesOverlay) {
         rulesCloseBtn.onclick = function () {
             rulesOverlay.classList.remove("result-overlay--visible");
-            if (cells.length > 0) { cells[0].focus(); }
+            if (cells.length > 0) {
+                cells[0].focus();
+            }
         };
     }
 
@@ -253,7 +288,9 @@ export var initUI = Object.freeze(function initUI() {
         if (event.key === "Escape") {
             if (isRulesPopup) {
                 rulesOverlay.classList.remove("result-overlay--visible");
-                if (cells.length > 0) { cells[0].focus(); }
+                if (cells.length > 0) {
+                    cells[0].focus();
+                }
             } else if (selectedCell) {
                 selectedCell = null; // Deselect piece on Escape
                 render();
@@ -263,9 +300,13 @@ export var initUI = Object.freeze(function initUI() {
 
         if (event.key === "n" || event.key === "N") {
             if (isGameOverPopup) {
-                if (playAgainBtn) { playAgainBtn.onclick(); }
+                if (playAgainBtn) {
+                    playAgainBtn.onclick();
+                }
             } else {
-                if (btnRestart) { btnRestart.onclick(); }
+                if (btnRestart) {
+                    btnRestart.onclick();
+                }
             }
             return;
         }
@@ -319,7 +360,13 @@ export var initUI = Object.freeze(function initUI() {
                     srcPiece.style.visibility = "hidden";
                 }
 
-                animateSlide(sr, sc, r, c, "player" + pieceValue, true).then(function () {
+                animateSlide(sr,
+                    sc,
+                    r,
+                    c,
+                    "player" + pieceValue,
+                    true
+                ).then(function () {
                     gameState = moveState;
                     selectedCell = null;
                     animating = false;
@@ -352,7 +399,8 @@ export var initUI = Object.freeze(function initUI() {
                 animating = true;
 
                 placedPiece = document.createElement("div");
-                placedPiece.className = "piece player" + gameState.currentPlayer;
+                placedPiece.className =
+                    "piece player" + gameState.currentPlayer;
                 cellEl.appendChild(placedPiece);
 
                 setTimeout(function () {
@@ -378,7 +426,12 @@ export var initUI = Object.freeze(function initUI() {
 
         cell.onkeydown = function (event) {
             // Ignore keys handled globally by document listener
-            if (event.key === "n" || event.key === "N" || event.key === "r" || event.key === "R") {
+            if (
+                event.key === "n" ||
+                event.key === "N" ||
+                event.key === "r" ||
+                event.key === "R"
+            ) {
                 return;
             }
 
@@ -412,3 +465,4 @@ export var initUI = Object.freeze(function initUI() {
         cells[0].focus();
     }
 });
+export { initUI };
