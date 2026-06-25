@@ -320,7 +320,9 @@ const initUI = Object.freeze(function initUI() {
 
         if (event.key === "Enter") {
             if (isGameOverPopup) {
-                if (playAgainBtn) { playAgainBtn.onclick(); }
+                if (playAgainBtn) {
+                    playAgainBtn.onclick();
+                }
                 event.preventDefault(); // Stop from clicking grid behind it
                 return;
             }
@@ -360,7 +362,8 @@ const initUI = Object.freeze(function initUI() {
                     srcPiece.style.visibility = "hidden";
                 }
 
-                animateSlide(sr,
+                animateSlide(
+                    sr,
                     sc,
                     r,
                     c,
@@ -399,8 +402,9 @@ const initUI = Object.freeze(function initUI() {
                 animating = true;
 
                 placedPiece = document.createElement("div");
-                placedPiece.className =
-                    "piece player" + gameState.currentPlayer;
+                placedPiece.className = (
+                    "piece player" + gameState.currentPlayer
+                );
                 cellEl.appendChild(placedPiece);
 
                 setTimeout(function () {
@@ -465,4 +469,4 @@ const initUI = Object.freeze(function initUI() {
         cells[0].focus();
     }
 });
-export { initUI };
+export {initUI};
