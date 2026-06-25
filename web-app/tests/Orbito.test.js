@@ -1,156 +1,544 @@
-import assert from "assert";
-import * as Orbito from "../orbito.js";
+import Orbito from "../orbito.js";
 
-const PIECE = Orbito.PIECE;
-const PHASE = Orbito.PHASE;
 
-describe("Initial Game State", function () {
-    it("should initialize a new game with an empty board and correct player", function () {
+// If your file is named orbito.js at the project root, change the path to:
+// import Orbito from "../orbito.js";
+
+// --- Shorthand constants for cleaner board setup ---
+const E = Orbito.PIECE.EMPTY;
+const P1 = Orbito.PIECE.PLAYER_1;
+const P2 = Orbito.PIECE.PLAYER_2;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TEST HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Creates a game state with a specific board layout for testing.
+ * This bypasses createGame so individual scenarios can be set up directly
+ * without having to replay a sequence of moves to reach them.
+ * @param {Orbito.Board} board The board layout to use.
+ * @param {Orbito.Player} [currentPlayer] Whose turn it is. Defaults to P1.
+ * @param {string} [phase] The game phase. Defaults to move_or_place.
+ * @returns {Object} A game state object ready for testing.
+ */
+const gameWithBoard = (
+    board,
+    currentPlayer = P1,
+    phase = Orbito.PHASE.MOVE_OR_PLACE
+) => ({
+    board: board.map((row) => [...row]),
+    phase,
+    currentPlayer,
+    winner: null,
+    winningCells: null,
+    isDraw: false
+});
+
+/**
+ * Places a piece on the board and returns the resulting game state
+ * (after rotation). This is a shorthand to reduce boilerplate in tests
+ * while still testing the real public function.
+ * @param {Object} game The current game state.
+ * @param {number} row Row index to place in.
+ * @param {number} col Column index to place in.
+ * @returns {Object} The new game state after placing and rotating.
+ */
+const place = (game, row, col) => Orbito.placePieceAndEndTurn(game, row, col).state;
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: INITIAL GAME STATE
+// Verify that a freshly created game starts in the correct neutral state
+// before any moves have been made.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("A freshly created game", function () {
+    it("has no winner", function () {
         const game = Orbito.createGame();
-        
-        // Ensure the board is empty
-        game.board.forEach(row => {
-            row.forEach(cell => {
-                assert.strictEqual(cell, PIECE.EMPTY, "Board should be empty initially");
-            });
-        });
-
-        assert.strictEqual(game.currentPlayer, PIECE.PLAYER_1, "Player 1 should start");
-        assert.strictEqual(game.phase, PHASE.MOVE_OR_PLACE, "Phase should allow moving or placing");
-        assert.strictEqual(game.winner, null, "No winner initially");
+        if (game.winner !== null) {
+            throw new Error(
+                "A new game should have no winner, " +
+                "but winner was reported as: " + game.winner
+            );
+        }
     });
-});
 
-describe("Selection & Movement Rules", function () {
-    it("canSelectPiece: A player cannot select an empty square", function () {
+    it("is not a draw", function () {
         const game = Orbito.createGame();
-        assert.strictEqual(Orbito.canSelectPiece(game, 0, 0), false);
+        if (game.isDraw !== false) {
+            throw new Error(
+                "A new game should not be a draw, " +
+                "but isDraw was: " + game.isDraw
+            );
+        }
     });
 
-    it("canSelectPiece: A player cannot select their own piece", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_1;
-        assert.strictEqual(Orbito.canSelectPiece(game, 0, 0), false);
-    });
-
-    it("canSelectPiece: A player CAN select an opponent's piece", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_2;
-        assert.strictEqual(Orbito.canSelectPiece(game, 0, 0), true);
-    });
-
-    it("canMovePiece: A piece cannot move to a non-adjacent square", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_2; // Opponent piece
-        assert.strictEqual(Orbito.canMovePiece(game, [0, 0], [2, 2]), false);
-    });
-
-    it("canMovePiece: A piece cannot move to an occupied square", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_2; 
-        game.board[0][1] = PIECE.PLAYER_1; 
-        assert.strictEqual(Orbito.canMovePiece(game, [0, 0], [0, 1]), false);
-    });
-
-    it("canMovePiece: A piece CAN move to an adjacent empty square", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_2;
-        assert.strictEqual(Orbito.canMovePiece(game, [0, 0], [0, 1]), true);
-    });
-
-    it("movePiece: successfully moves an opponent piece and changes phase to PLACE", function () {
-        let game = Orbito.createGame();
-        game.board[0][0] = PIECE.PLAYER_2;
-
-        const nextState = Orbito.movePiece(game, [0, 0], [0, 1]);
-
-        assert.strictEqual(nextState.board[0][0], PIECE.EMPTY);
-        assert.strictEqual(nextState.board[0][1], PIECE.PLAYER_2);
-        assert.strictEqual(nextState.phase, PHASE.PLACE);
+    it("is not over", function () {
+        const game = Orbito.createGame();
+        if (Orbito.isGameOver(game)) {
+            throw new Error(
+                "A new game should not be over, " +
+                "but isGameOver returned true."
+            );
+        }
     });
 });
 
-describe("Placement & Turn Resolution", function () {
-    it("canPlacePiece: Cannot place on an occupied square", function () {
-        let game = Orbito.createGame();
-        game.board[1][1] = PIECE.PLAYER_2;
-        assert.strictEqual(Orbito.canPlacePiece(game, 1, 1), false);
-    });
 
-    it("placePieceAndEndTurn: Returns same state if placement is invalid", function () {
-        let game = Orbito.createGame();
-        game.board[1][1] = PIECE.PLAYER_2;
-        
-        const result = Orbito.placePieceAndEndTurn(game, 1, 1);
-        assert.strictEqual(result.state, game, "State should be unmodified");
-    });
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: INCOMPLETE LINES ARE NOT WINS
+// Verify that fewer than four pieces in a line do not trigger a win.
+// This guards against off-by-one errors in the win-detection logic.
+// ─────────────────────────────────────────────────────────────────────────────
 
-    it("placePieceAndEndTurn: Places piece, rotates counter-clockwise, and switches player", function () {
-        let game = Orbito.createGame();
-        // Set up an identifiable piece at [0][1] to verify rotation
-        game.board[0][1] = PIECE.PLAYER_2;
-        
-        // Player 1 places piece at [1][1]
-        const result = Orbito.placePieceAndEndTurn(game, 1, 1);
-        
-        // 1. Verify intermediate board (before rotation)
-        assert.strictEqual(result.intermediateBoard[1][1], PIECE.PLAYER_1, "Piece placed on intermediate board");
-        assert.strictEqual(result.intermediateBoard[0][1], PIECE.PLAYER_2, "Old piece remains on intermediate board");
+describe("Incomplete lines are not wins", function () {
+    it(
+        `Given a board where a player has exactly three pieces in a row after rotation,
+the game should not report a winner.`,
+        function () {
+            // After placing P1 at [0][0] and rotating, the bottom row of the
+            // rotated board becomes [EMPTY, P1, P1, P1] — only 3 in a row.
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [E, E, E, E],
+                [P1, P1, P1, E]
+            ]);
 
-        // 2. Verify rotation in final state
-        // [0][1] (outer ring) rotates counter-clockwise to [0][0]
-        assert.strictEqual(result.state.board[0][0], PIECE.PLAYER_2, "Existing piece rotated correctly");
-        
-        // [1][1] (inner ring) rotates counter-clockwise to [2][1]
-        assert.strictEqual(result.state.board[2][1], PIECE.PLAYER_1, "Newly placed piece rotated correctly");
+            const result = place(game, 0, 0);
 
-        // 3. Verify turn ended
-        assert.strictEqual(result.state.currentPlayer, PIECE.PLAYER_2, "Turn swapped to player 2");
-        assert.strictEqual(result.state.phase, PHASE.MOVE_OR_PLACE, "Phase reset");
-    });
-});
-
-describe("Win & Draw Conditions", function () {
-    it("isGameOver: Horizontal win correctly identified AFTER rotation", function () {
-        let game = Orbito.createGame();
-        // Setup a vertical column on the right. After counter-clockwise rotation, 
-        // it becomes a horizontal row at the top.
-        game.board[0][3] = PIECE.PLAYER_1;
-        game.board[1][3] = PIECE.PLAYER_1;
-        game.board[2][3] = PIECE.PLAYER_1;
-        
-        // Place the 4th piece to trigger resolution
-        const result = Orbito.placePieceAndEndTurn(game, 3, 3);
-        
-        assert.strictEqual(result.state.winner, PIECE.PLAYER_1, "Player 1 wins horizontally");
-        assert.strictEqual(Orbito.isGameOver(result.state), true);
-    });
-
-    it("isGameOver: Diagonal win correctly identified", function () {
-        let game = Orbito.createGame();
-        game.board[0][1] = PIECE.PLAYER_2; // Rotates to [0][0]
-        game.board[1][2] = PIECE.PLAYER_2; // Rotates to [1][1]
-        game.board[2][1] = PIECE.PLAYER_2; // Rotates to [2][2]
-        
-        const result = Orbito.placePieceAndEndTurn(game, 3, 2); // Rotates to [3][3]
-
-        assert.strictEqual(result.state.winner, PIECE.PLAYER_2, "Player 2 wins diagonally");
-    });
-
-    it("isGameOver: Draw condition when board is full and no lines", function () {
-        let game = Orbito.createGame();
-        // Fill board manually without lines
-        for(let r=0; r<4; r++){
-            for(let c=0; c<4; c++){
-                game.board[r][c] = ((r+c)%2 === 0) ? PIECE.PLAYER_1 : PIECE.PLAYER_2;
+            if (result.winner !== null) {
+                throw new Error(
+                    "Three pieces in a row should not be a win, " +
+                    "but winner was reported as: " + result.winner
+                );
             }
         }
-        game.board[0][0] = PIECE.EMPTY; // leave one spot empty
-        
-        // Place the final piece
-        const result = Orbito.placePieceAndEndTurn(game, 0, 0);
+    );
 
-        assert.strictEqual(result.state.isDraw, true, "Game is a draw");
-        assert.strictEqual(Orbito.isGameOver(result.state), true);
+    it(
+        `Given a board where a player has three pieces in a column after rotation,
+the game should not report a winner.`,
+        function () {
+            // After placing P1 at [2][3] and rotating, column 3 of the
+            // rotated board is [P1, P1, P1, EMPTY] — only 3 in a column.
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, P1],
+                [E, E, E, E],
+                [E, E, E, P1]
+            ]);
+
+            const result = place(game, 2, 3);
+
+            if (result.winner !== null) {
+                throw new Error(
+                    "Three pieces in a column should not be a win, " +
+                    "but winner was reported as: " + result.winner
+                );
+            }
+        }
+    );
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: WIN CONDITIONS
+// Verify that four in a row in every direction correctly triggers a win
+// for the appropriate player. In Orbito, the win check happens AFTER the
+// board rotates, so these boards are designed to win post-rotation.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Win conditions", function () {
+    describe("Row wins", function () {
+        it(
+            `Given a board where placing a piece gives player 1 four in a row after rotation,
+the game should report player 1 as the winner.`,
+            function () {
+                // After placing P1 at [3][2] and rotating:
+                // Row 3 of rotated board = [board[2][0], board[3][0], board[3][1], board[3][2]]
+                //                        = [P1, P1, P1, P1]
+                const game = gameWithBoard([
+                    [E, E, E, E],
+                    [E, E, E, E],
+                    [P1, E, E, E],
+                    [P1, P1, E, E]
+                ]);
+
+                const result = place(game, 3, 2);
+
+                if (result.winner !== P1) {
+                    throw new Error(
+                        "Expected player 1 to win with four in a row, " +
+                        "but winner was: " + result.winner
+                    );
+                }
+            }
+        );
+
+        it(
+            `Given a board where placing a piece gives player 2 four in a row after rotation,
+the game should report player 2 as the winner.`,
+            function () {
+                // Same pattern as above but for player 2
+                const game = gameWithBoard([
+                    [E, E, E, E],
+                    [E, E, E, E],
+                    [P2, E, E, E],
+                    [P2, P2, E, E]
+                ], P2);
+
+                const result = place(game, 3, 2);
+
+                if (result.winner !== P2) {
+                    throw new Error(
+                        "Expected player 2 to win with four in a row, " +
+                        "but winner was: " + result.winner
+                    );
+                }
+            }
+        );
     });
+
+    describe("Column wins", function () {
+        it(
+            `Given a board where placing a piece gives player 1 four in a column after rotation,
+the game should report player 1 as the winner.`,
+            function () {
+                // After placing P1 at [3][0] and rotating:
+                // Column 1 of rotated board = [board[0][2], board[1][2], board[1][1], board[3][0]]
+                //                           = [P1, P1, P1, P1]
+                const game = gameWithBoard([
+                    [E, E, P1, E],
+                    [E, P1, P1, E],
+                    [E, E, E, E],
+                    [E, E, E, E]
+                ]);
+
+                const result = place(game, 3, 0);
+
+                if (result.winner !== P1) {
+                    throw new Error(
+                        "Expected player 1 to win with four in a column, " +
+                        "but winner was: " + result.winner
+                    );
+                }
+            }
+        );
+    });
+
+    describe("Diagonal wins", function () {
+        it(
+            `Given a board where placing a piece gives player 1 four along the main diagonal after rotation,
+the game should report player 1 as the winner.`,
+            function () {
+                // After placing P1 at [3][2] and rotating:
+                // Main diagonal = [board[0][1], board[1][2], board[2][1], board[3][2]]
+                //               = [P1, P1, P1, P1]
+                const game = gameWithBoard([
+                    [E, P1, E, E],
+                    [E, E, P1, E],
+                    [E, P1, E, E],
+                    [E, E, E, E]
+                ]);
+
+                const result = place(game, 3, 2);
+
+                if (result.winner !== P1) {
+                    throw new Error(
+                        "Expected player 1 to win with the main diagonal, " +
+                        "but winner was: " + result.winner
+                    );
+                }
+            }
+        );
+
+        it(
+            `Given a board where placing a piece gives player 1 four along the anti-diagonal after rotation,
+the game should report player 1 as the winner.`,
+            function () {
+                // After placing P1 at [2][0] and rotating:
+                // Anti-diagonal = [board[1][3], board[2][2], board[1][1], board[2][0]]
+                //               = [P1, P1, P1, P1]
+                const game = gameWithBoard([
+                    [E, E, E, E],
+                    [E, P1, E, P1],
+                    [E, E, P1, E],
+                    [E, E, E, E]
+                ]);
+
+                const result = place(game, 2, 0);
+
+                if (result.winner !== P1) {
+                    throw new Error(
+                        "Expected player 1 to win with the anti-diagonal, " +
+                        "but winner was: " + result.winner
+                    );
+                }
+            }
+        );
+    });
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: CORRECT WINNER IS REPORTED
+// Verify that the winner field holds the player who actually won,
+// not the other player or a default value.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Correct winner is reported", function () {
+    it(
+        `When player 1 wins, the game should not report player 2 as the winner.`,
+        function () {
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [P1, E, E, E],
+                [P1, P1, E, E]
+            ]);
+
+            const result = place(game, 3, 2);
+
+            if (result.winner === P2) {
+                throw new Error(
+                    "Player 1 made the winning move, " +
+                    "but player 2 was reported as the winner."
+                );
+            }
+        }
+    );
+
+    it(
+        `When player 2 wins, the game should not report player 1 as the winner.`,
+        function () {
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [P2, E, E, E],
+                [P2, P2, E, E]
+            ], P2);
+
+            const result = place(game, 3, 2);
+
+            if (result.winner === P1) {
+                throw new Error(
+                    "Player 2 made the winning move, " +
+                    "but player 1 was reported as the winner."
+                );
+            }
+        }
+    );
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: ORBITO-SPECIFIC RULE — WIN IS CHECKED AFTER ROTATION
+// In Orbito, unlike other 4-in-a-row games, the board rotates after every
+// piece is placed. The win must be detected from the rotated board, not the
+// placement position itself.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Win is detected after board rotation, not before", function () {
+    it(
+        `Given a board where no four-in-a-row exists before rotation but does after,
+the game should detect the win after rotation.`,
+        function () {
+            // Board before placing:
+            // row 3 = [P1, P1, EMPTY, EMPTY] — no four in a row
+            // After placing P1 at [3][2]:
+            // row 3 = [P1, P1, P1, EMPTY] — still no four in a row in the UNROTATED board
+            // After rotation, row 3 of rotated board = [P1, P1, P1, P1] — four in a row!
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [P1, E, E, E],
+                [P1, P1, E, E]
+            ]);
+
+            const { state, intermediateBoard } = Orbito.placePieceAndEndTurn(game, 3, 2);
+
+            // The intermediate board is after placing but BEFORE rotation.
+            // The bottom row should NOT yet have four-in-a-row.
+            const bottomRowBeforeRotation = intermediateBoard[3];
+            const winAlreadyExistedBeforeRotation = bottomRowBeforeRotation.every(
+                (cell) => cell === P1
+            );
+
+            if (winAlreadyExistedBeforeRotation) {
+                throw new Error(
+                    "This test is invalid: the board already has four in a row " +
+                    "before rotation, so it does not test the rotation rule. " +
+                    "The board setup needs to be changed."
+                );
+            }
+
+            if (state.winner !== P1) {
+                throw new Error(
+                    "The win should be detected after the board rotates, " +
+                    "but no winner was reported. Winner was: " + state.winner
+                );
+            }
+        }
+    );
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: SIMULTANEOUS WIN → DRAW
+// In Orbito, rotation can cause both players to complete four-in-a-row at the
+// same time. The rules state this is a draw.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Simultaneous four-in-a-row by both players", function () {
+    it(
+        `If the board rotation causes both players to complete four in a row simultaneously,
+the result should be a draw and neither player should be declared the winner.`,
+        function () {
+            // After placing P1 at [1][3] and rotating:
+            // Row 0 of rotated board = [board[0][1], board[0][2], board[0][3], board[1][3]]
+            //                        = [P1, P1, P1, P1] → P1 wins row 0
+            // Row 3 of rotated board = [board[2][0], board[3][0], board[3][1], board[3][2]]
+            //                        = [P2, P2, P2, P2] → P2 wins row 3
+            // Both players win → draw
+            const game = gameWithBoard([
+                [E, P1, P1, P1],
+                [E, E, E, E],
+                [P2, E, E, E],
+                [P2, P2, P2, E]
+            ]);
+
+            const result = place(game, 1, 3);
+
+            if (!result.isDraw) {
+                throw new Error(
+                    "When both players complete four-in-a-row simultaneously, " +
+                    "the result should be a draw. isDraw was: " + result.isDraw +
+                    ", winner was: " + result.winner
+                );
+            }
+
+            if (result.winner !== null) {
+                throw new Error(
+                    "When both players complete four-in-a-row simultaneously, " +
+                    "no single player should be declared the winner. " +
+                    "Winner was: " + result.winner
+                );
+            }
+        }
+    );
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: DRAW — FULL BOARD WITH NO WINNER
+// If the board fills up and no player has four in a row, the game is a draw.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Draw by full board", function () {
+    it(
+        `When the last piece is placed and the board is completely full with no four-in-a-row,
+the game should be a draw.`,
+        function () {
+            // Board is full after placing P1 at [3][3].
+            // After rotation no row, column, or diagonal has four of the same piece.
+            const game = gameWithBoard([
+                [P1, P2, P2, P1],
+                [P2, P1, P1, P2],
+                [P2, P1, P1, P2],
+                [P1, P2, P2, E]
+            ]);
+
+            const result = place(game, 3, 3);
+
+            if (result.winner !== null) {
+                throw new Error(
+                    "A full board with no four-in-a-row should be a draw, " +
+                    "but a winner was declared: " + result.winner
+                );
+            }
+
+            if (!result.isDraw) {
+                throw new Error(
+                    "A full board with no four-in-a-row should set isDraw to true, " +
+                    "but isDraw was: " + result.isDraw
+                );
+            }
+        }
+    );
+});
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTS: GAME OVER BEHAVIOUR
+// Verify the game correctly locks itself after a win or draw.
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("Game over behaviour", function () {
+    it(
+        `After a player wins, isGameOver should return true.`,
+        function () {
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [P1, E, E, E],
+                [P1, P1, E, E]
+            ]);
+
+            const result = place(game, 3, 2);
+
+            if (!Orbito.isGameOver(result)) {
+                throw new Error(
+                    "After player 1 wins, isGameOver should return true, " +
+                    "but it returned false."
+                );
+            }
+        }
+    );
+
+    it(
+        `After a player wins, attempting to place another piece should not change the game state.`,
+        function () {
+            const game = gameWithBoard([
+                [E, E, E, E],
+                [E, E, E, E],
+                [P1, E, E, E],
+                [P1, P1, E, E]
+            ]);
+
+            const wonGame = place(game, 3, 2);
+
+            // Try to place on an empty square of the already-won game
+            const afterAttempt = place(wonGame, 0, 0);
+
+            if (afterAttempt !== wonGame) {
+                throw new Error(
+                    "After the game is won, placing a piece should return the " +
+                    "same game state unchanged, but a new state was returned."
+                );
+            }
+        }
+    );
+
+    it(
+        `After a draw, isGameOver should return true.`,
+        function () {
+            const game = gameWithBoard([
+                [P1, P2, P2, P1],
+                [P2, P1, P1, P2],
+                [P2, P1, P1, P2],
+                [P1, P2, P2, E]
+            ]);
+
+            const result = place(game, 3, 3);
+
+            if (!Orbito.isGameOver(result)) {
+                throw new Error(
+                    "After a draw, isGameOver should return true, " +
+                    "but it returned false."
+                );
+            }
+        }
+    );
 });

@@ -66,6 +66,7 @@ body {
 .board.player1-turn {
     outline: 30px solid #ffffff;
 }
+
 .player1-turn .cell:focus-visible {
     outline: 4px solid #ffffff;
     outline-offset: -4px;
@@ -74,6 +75,7 @@ body {
 .board.player2-turn {
     outline: 30px solid #EE583F;
 }
+
 .player2-turn .cell:focus-visible {
     outline: 4px solid #EE583F;
     outline-offset: -4px;
@@ -149,13 +151,80 @@ body {
 /* ─────────────────────────────
    DRAG + UI STATES
 ──────────────────────────── */
-
+/*
 .cell--dragging {
     outline: 3px solid #F8AC2F;
     outline-offset: -3px;
     background-color: rgba(248, 172, 47, 0.15);
 }
+/*
+/* ─────────────────────────────
+   FOCUS & SELECTION STATES
+──────────────────────────── */
 
+/* 1. Ensure the cell can position the highlights correctly */
+.cell {
+    position: relative;
+}
+
+/* 2. Remove the browser's default ugly blue focus ring entirely */
+.cell:focus {
+    outline: none;
+}
+
+/* 3. KEYBOARD FOCUS RING (Only shows on keyboard navigation, NOT mouse clicks) */
+.board.player1-turn .cell:focus-visible::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    outline: 4px solid #ffffff;
+    /* Player 1 White */
+    outline-offset: -4px;
+    z-index: 50;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.board.player2-turn .cell:focus-visible::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    outline: 4px solid #EE583F;
+    /* Player 2 Orange */
+    outline-offset: -4px;
+    z-index: 50;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* 4. SELECTED PIECE HIGHLIGHT (Yellow Box) */
+/* This always shows when an opponent piece is clicked/selected */
+.cell--dragging::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    outline: 4px solid #F8AC2F !important;
+    /* Forces yellow */
+    outline-offset: -4px;
+    z-index: 60;
+    /* Higher z-index to sit above the keyboard color */
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* Keep the slight background tint for the selected piece */
+.cell--dragging {
+    background-color: rgba(248, 172, 47, 0.15) !important;
+}
 
 /* ─────────────────────────────
    STATUS TEXT (unchanged)
@@ -349,6 +418,7 @@ body {
 .player1-score h3 {
     color: #ffffff;
 }
+
 .player1-score p {
     color: #ffffff;
 }
@@ -356,6 +426,7 @@ body {
 .player2-score h3 {
     color: #EE583F;
 }
+
 .player2-score p {
     color: #EE583F;
 }
