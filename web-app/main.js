@@ -229,9 +229,12 @@ const initUI = Object.freeze(function initUI() {
 
     function checkAndShowResult() {
         if (Orbito.isGameOver(gameState)) {
-            if (gameState.winner) {
-                messageEl.textContent = "Player " + gameState.winner + " Wins!";
-                recordWin(gameState.winner);
+            if (gameState.winner === 1) {
+                messageEl.textContent = "White Wins!";
+                recordWin(1);
+            } else if (gameState.winner === 2) {
+                messageEl.textContent = "Red Wins!";
+                recordWin(2);
             } else if (gameState.isDraw) {
                 messageEl.textContent = "It's a Draw!";
             }
@@ -248,7 +251,7 @@ const initUI = Object.freeze(function initUI() {
                 } else if (gameState.isDraw) {
                     popupEl.classList.add("result-popup--draw");
                 }
-            }, 200);
+            }, 400);
             if (playAgainBtn) {
                 playAgainBtn.focus();
             }

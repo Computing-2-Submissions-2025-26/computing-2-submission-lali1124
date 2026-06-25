@@ -3,24 +3,22 @@ import Orbito from "../orbito.js";
 
 // If your file is named orbito.js at the project root, change the path to:
 // import Orbito from "../orbito.js";
-
-// --- Shorthand constants for cleaner board setup ---
 const E = Orbito.PIECE.EMPTY;
 const P1 = Orbito.PIECE.PLAYER_1;
 const P2 = Orbito.PIECE.PLAYER_2;
-const emojiMap = {
-    "1": "⚪",
-    "2": "🔴",
-    "0": "⚫"
-};
+const DISPLAY_MODE = "to_string";
 
-function formatBoard(board) {
-    return board.map(function (row) {
-        return row.map(function (cell) {
-            return emojiMap[cell] || "❓";
-        }).join(" ");
-    }).join("\n");
-}
+const display_functions = {
+    "json": JSON.stringify,
+    "to_string": Orbito.to_string_with_tokens(Orbito.token_strings.disks)
+};
+const display_board = function (board) {
+    try {
+        return "\n" + display_functions[DISPLAY_MODE](board);
+    } catch (ignore) {
+        return "\n" + JSON.stringify(board);
+    }
+};
 // ─────────────────────────────────────────────────────────────────────────────
 // TEST HELPERS
 // ─────────────────────────────────────────────────────────────────────────────
@@ -129,7 +127,7 @@ the game should not report a winner.`,
                 throw new Error(
                     "Three pieces in a row should not be a win, " +
                     "but winner was reported as: " + result.winner +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -154,7 +152,7 @@ the game should not report a winner.`,
                 throw new Error(
                     "Three pieces in a column should not be a win, " +
                     "but winner was reported as: " + result.winner +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -192,7 +190,7 @@ describe("Win conditions", function () {
                     throw new Error(
                         "Expected player 1 to win with four in a row, " +
                         "but winner was: " + result.winner +
-                        "The board was: " + "\n" + formatBoard(result.board)
+                        display_board(result.board)
                     );
                 }
             }
@@ -216,7 +214,7 @@ describe("Win conditions", function () {
                     throw new Error(
                         "Expected player 2 to win with four in a row, " +
                         "but winner was: " + result.winner +
-                        "The board was: " + "\n" + formatBoard(result.board)
+                        display_board(result.board)
                     );
                 }
             }
@@ -246,7 +244,7 @@ describe("Win conditions", function () {
                     throw new Error(
                         "Expected player 1 to win with four in a column, " +
                         "but winner was: " + result.winner +
-                        "The board was: " + "\n" + formatBoard(result.board)
+                        display_board(result.board)
                     );
                 }
             }
@@ -276,7 +274,7 @@ describe("Win conditions", function () {
                     throw new Error(
                         "Expected player 1 to win with the main diagonal, " +
                         "but winner was: " + result.winner +
-                        "The board was: " + "\n" + formatBoard(result.board)
+                        display_board(result.board)
                     );
                 }
             }
@@ -304,7 +302,7 @@ describe("Win conditions", function () {
                     throw new Error(
                         "Expected player 1 to win with the anti-diagonal, " +
                         "but winner was: " + result.winner +
-                        "The board was: " + "\n" + formatBoard(result.board)
+                        display_board(result.board)
                     );
                 }
             }
@@ -337,7 +335,7 @@ describe("Correct winner is reported", function () {
                 throw new Error(
                     "Player 1 made the winning move, " +
                     "but player 2 was reported as the winner." +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -360,7 +358,7 @@ describe("Correct winner is reported", function () {
                 throw new Error(
                     "Player 2 made the winning move, " +
                     "but player 1 was reported as the winner." +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -465,7 +463,7 @@ the result should be a draw and neither player should be declared the winner.`,
                     "the result should be a draw. isDraw was: " +
                     result.isDraw +
                     ", winner was: " + result.winner +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
 
@@ -474,7 +472,7 @@ the result should be a draw and neither player should be declared the winner.`,
                     "When both players complete four-in-a-row" +
                     "simultaneously, no single player should be" +
                     "declared the winner. Winner was: " + result.winner +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -509,7 +507,7 @@ the game should be a draw.`,
                 throw new Error(
                     "A full board with no four-in-a-row should be a draw, " +
                     "but a winner was declared: " + result.winner +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
 
@@ -517,7 +515,7 @@ the game should be a draw.`,
                 throw new Error(
                     "A full board with no four-in-a-row should set" +
                     "isDraw to true, but isDraw was: " + result.isDraw +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -547,7 +545,7 @@ describe("Game over behaviour", function () {
                 throw new Error(
                     "After player 1 wins, isGameOver should return true, " +
                     "but it returned false." +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
@@ -596,7 +594,7 @@ describe("Game over behaviour", function () {
                 throw new Error(
                     "After a draw, isGameOver should return true, " +
                     "but it returned false." +
-                    "The board was: " + "\n" + formatBoard(result.board)
+                    display_board(result.board)
                 );
             }
         }
