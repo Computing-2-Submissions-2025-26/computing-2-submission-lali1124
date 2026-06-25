@@ -20,7 +20,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 3.5px;
 }
 
 /* ─────────────────────────────
@@ -41,7 +41,7 @@ body {
     background-color: #333333;
     transition: transform 0.2s ease-in-out;
     outline: 30px solid #A4CCC4;
-    margin: 0 40px;
+    margin: 0 50px;
 }
 
 @keyframes BorderGrow {
